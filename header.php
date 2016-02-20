@@ -34,15 +34,18 @@
         <a class="navbar-brand" href="Login.php">Brain Storm. Inc</a>
       </div>
 
-      <form class="navbar-form navbar-left" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" >
+      <form class="navbar navbar-left navbar-form " role="search">
+        <div class="input-group">
+           <input type="text" class="form-control" placeholder="Search for...">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button">Go!</button>
+            </span>
         </div>
       </form>
 
         <ul class="nav navbar-nav navbar-left">
-          <li><a href="Login.php">Welcome to the Storm</a></li>
-          <li><a href=" ">Look who's using it</a></li>
+          <li><a href="Login.php">Welcome !</a></li>
+          <li><a href=" ">Look who else is using it !</a></li>
         </ul>
  
     </div>
@@ -50,4 +53,4 @@
 
     <div class="container">
 
-    <h1 class="text-center">Brain Storm. Inc</h1>
+    <h1 class="text-center">Have a new idea? Want to check other's idea?</h1>
