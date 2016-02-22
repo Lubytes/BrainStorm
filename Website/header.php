@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Brain Storm</title>
+    <title>BrainStorm</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
@@ -31,7 +31,7 @@
     <nav class="navbar navbar-default">
     <div class="container" style="max-width: 800px;">
       <div class="navbar-header">
-        <a class="navbar-brand" href="Login.php">Brain Storm. Inc</a>
+        <a class="navbar-brand" href="Login.php">BrainStorm Inc.</a>
       </div>
 
       <form class="navbar navbar-left navbar-form " role="search">
