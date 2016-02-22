@@ -7,7 +7,7 @@ require_once('header.php');
 
 ?>
 
-
+	<h1 class="text-center">Have a new idea? Want to improve other ideas?</h1>
       <div id="login">
         <div class="panel panel-default" style="clear: both;">
           <div class="panel-heading">
@@ -25,7 +25,7 @@ require_once('header.php');
 
             <div class="form-group">  
               <div>
-                <input type="password" name="password" id="password" class="form-control" placeholder="password" autocomplete="off">
+                <input type="password" name="password" id="password" class="form-control" placeholder="Password" autocomplete="off">
               </div>
             </div>
 

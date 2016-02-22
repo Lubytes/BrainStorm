@@ -53,4 +53,4 @@
 
     <div class="container">
 
-    <h1 class="text-center">Have a new idea? Want to check other's idea?</h1>
+   
