@@ -1,5 +1,20 @@
 <?php
 
+//connecting to the database
+$dsn = 'mysql:host=localhost;dbname=brainstorm;port=8889';
+	$name = 'root';
+	$pword = 'root';
+	 
+try {
+    $dbh = new PDO($dsn, $name, $pword);
+    foreach($dbh->query('SELECT * from posts') as $row) {
+        //print_r($row);
+    }
+	} catch (PDOException $e) {
+		print "Error!: " . $e->getMessage() . "<br/>";
+		die();
+	}
+
 session_name('project');  
 session_start();
 
@@ -17,14 +32,29 @@ $nameErr = $genderErr = $passErr = "";
 $name = $gender = $pass = "";
 $val = "1";
 $p = "0";
+$u = "0";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
    
    //Username Validation
    if (empty($_POST["username"])) {
      $nameErr = "Username is required";
+     $u = "1";
    } else {
      $username = test_input($_POST["username"]);
+     
+     //check for the username in the db
+      $sql = "SELECT * FROM users WHERE username='$username'";
+      $query = $dbh->query($sql);
+      //echo $count . "<br/>";
+      $count = $query->rowCount();
+      
+      if ($count>0){
+      	$nameErr = "Username is not unique";
+      	$u = "1";
+      }
+        
+     
    }
     //Display Name Validation
    if (empty($_POST["dname"])) {
@@ -65,7 +95,7 @@ function test_input($data) {
 	 
 <!-- Validation Boolean and Display-->
 <span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if (empty($_POST["gender"])) {echo $genderErr."<br><br>"; $val = "0";}} ?></span>
-<span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if (empty($_POST["username"])) {echo $nameErr."<br><br>"; $val = "0"; }}?></span>
+<span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if ($u == "1") {echo $nameErr."<br><br>"; $val = "0"; }}?></span>
 <span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if (empty($_POST["dname"])) {echo $dnameErr."<br><br>"; $val = "0";}} ?></span>
 <span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if ($p=="1") {echo $passErr."<br><br>"; $val = "0"; }}?></span>
 	 
@@ -154,6 +184,28 @@ function test_input($data) {
 
 
 <?php
-
+	//if everything is good, add to db
+	
+	if ($val=="1"){
+	//hash the password
+		$hash = password_hash($pass, PASSWORD_DEFAULT);
+		$blank='';
+		$admin = 0;
+		//insert
+		$stmt = $dbh->prepare("INSERT INTO users (username, password, email, displayName, gender, picture, description, status, admin)
+							VALUES (:username, :password, :email, :displayName, :gender, :picture, :description, :status, :admin)");
+		$stmt->bindParam(':username', $username);
+		$stmt->bindParam(':password', $hash);
+		$stmt->bindParam(':email', $blank);
+		$stmt->bindParam(':displayName', $dname);
+		$stmt->bindParam(':gender', $gender);
+		$stmt->bindParam(':picture', $blank);
+		$stmt->bindParam(':description', $blank);
+		$stmt->bindParam(':status', $blank);
+		$stmt->bindParam(':admin', $admin);
+		$stmt->execute();
+	}
+	
+	
 	require_once('footer.php');
 ?>
