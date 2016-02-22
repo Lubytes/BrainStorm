@@ -7,6 +7,67 @@ require_once('header.php');
  
 
 ?>
+<style>
+.error {color: #3366ff;}
+</style>
+<!--Validation of entries-->	
+<?php
+// define variables and set to empty values
+$nameErr = $genderErr = $passErr = "";
+$name = $gender = $pass = "";
+$val = "1";
+$p = "0";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+   
+   //Username Validation
+   if (empty($_POST["username"])) {
+     $nameErr = "Username is required";
+   } else {
+     $username = test_input($_POST["username"]);
+   }
+    //Display Name Validation
+   if (empty($_POST["dname"])) {
+     $dnameErr = "Display Name is required";
+   } else {
+     $dname = test_input($_POST["dname"]);
+   } 
+	//Gender validation
+   if (empty($_POST["gender"])) {
+     $genderErr = "Gender is required";
+   } else {
+     $gender = test_input($_POST["gender"]);
+   }
+
+   //Gender validation
+   if (empty($_POST["password"])) {
+     $passErr = "You must enter in a password";
+	 $p = "1";
+   } else if($_POST["password"] != $_POST["passwordConfirm"]){
+     $passErr = "Password must be the same as the confirmation";
+	 $p = "1";
+   }
+   else{
+	   $pass = test_input($_POST["password"]);
+   }
+   
+   
+   
+}
+
+function test_input($data) {
+   $data = trim($data);
+   $data = stripslashes($data);
+   $data = htmlspecialchars($data);
+   return $data;
+}
+?>
+	 
+<!-- Validation Boolean and Display-->
+<span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if (empty($_POST["gender"])) {echo $genderErr."<br><br>"; $val = "0";}} ?></span>
+<span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if (empty($_POST["username"])) {echo $nameErr."<br><br>"; $val = "0"; }}?></span>
+<span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if (empty($_POST["dname"])) {echo $dnameErr."<br><br>"; $val = "0";}} ?></span>
+<span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if ($p=="1") {echo $passErr."<br><br>"; $val = "0"; }}?></span>
 	 
       <div id="login">
         <div class="panel panel-default" style="clear: both;">
@@ -17,7 +78,7 @@ require_once('header.php');
 
 		  
 			<!--Registration Form-->
-            <form action="Login.php" method="post" >
+            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
 
 			<!--Username-->
 			Identifiers:
