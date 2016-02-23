@@ -44,15 +44,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      $username = test_input($_POST["username"]);
      
      //check for the username in the db
-      $sql = "SELECT * FROM users WHERE username='$username'";
-      $query = $dbh->query($sql);
-      //echo $count . "<br/>";
-      $count = $query->rowCount();
-      
-      if ($count>0){
-      	$nameErr = "Username is not unique";
-      	$u = "1";
-      }
+	 $username = test_input($_POST["username"]);
+	 $stmt = $dbh->prepare('SELECT * from users WHERE username=:name');
+	 $stmt->bindParam(':name', $username);
+	 $stmt->execute();
+	 if ($stmt->rowCount() > 0){
+	 	$nameErr = "Username is not unique";
+	 	$u = "1";
+	 }
         
      
    }
@@ -206,6 +205,8 @@ function test_input($data) {
 		$stmt->execute();
 	}
 	
+	//close the connection
+	$dbh = null;
 	
 	require_once('footer.php');
 ?>
