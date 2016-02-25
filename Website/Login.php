@@ -10,13 +10,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$username = "";
 	$password = "";
 	
-	//connecting to the database
-	$dsn = 'mysql:host=localhost;dbname=brainstorm;port=8889';
-	$name = 'root';
-	$pword = 'root';
+	//set credentials if they are not set already
+	if (!isset($dsn)) {
+		$dsn = 'mysql:host=localhost;dbname=brainstorm;port=8889';
+	}
+	if (!isset($dbname)) {
+		$dbname = 'root';
+	}
+	if (!isset($dbpword)) {
+		$dbpword = 'root';
+	}
 
 	try {
-		$dbh = new PDO($dsn, $name, $pword);
+		$dbh = new PDO($dsn, $dbname, $dbpword);
 		
 		//check username
 		if (empty($_POST["username"])) {

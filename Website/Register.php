@@ -1,12 +1,19 @@
 <?php
 
-//connecting to the database
-$dsn = 'mysql:host=localhost;dbname=brainstorm;port=8889';
-	$name = 'root';
-	$pword = 'root';
+	//connecting to the database
+	//set credentials if they are not set already
+	if (!isset($dsn)) {
+		$dsn = 'mysql:host=localhost;dbname=brainstorm;port=8889';
+	}
+	if (!isset($dbname)) {
+		$dbname = 'root';
+	}
+	if (!isset($dbpword)) {
+		$dbpword = 'root';
+	}
 	 
 try {
-    $dbh = new PDO($dsn, $name, $pword);
+    $dbh = new PDO($dsn, $dbname, $dbpword);
     foreach($dbh->query('SELECT * from posts') as $row) {
         //print_r($row);
     }
@@ -185,7 +192,7 @@ function test_input($data) {
 <?php
 	//if everything is good, add to db
 	
-	if ($val=="1"){
+	if ($_SERVER["REQUEST_METHOD"] == "POST" && $val=="1"){
 	//hash the password
 		$hash = password_hash($pass, PASSWORD_DEFAULT);
 		$blank='';
