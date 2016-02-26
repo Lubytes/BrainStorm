@@ -3,12 +3,15 @@
 //require_once('Register.php');
 
 require_once('header.php');
- 
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 	$username = "";
 	$password = "";
+	$nameErr = $passErr = "";
+	$val = true; //tests for validation
+	$p = $u = "0";
 	
 	//connecting to the database
 	include('cred/cred.php');
@@ -30,6 +33,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if (empty($_POST["username"])) {
 		
 			//empty, print error
+			$nameErr = "Username is empty";
+			$u = "1";
+			$val = false;
 		
 	    } else {
 	    	$username = test_input($_POST["username"]);
@@ -40,45 +46,59 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			if ($stmt->rowCount() > 0){
 				$check = $stmt->fetch(PDO::FETCH_ASSOC);
 				
-				// Username exists, fill the session variables
+				// Username exists, check the password
+				if (empty($_POST["password"])) {
 		
-			} else {
-	
-				//the username doesn't exist, so print an error
-			}
-		}
-		
-		//check password
-		if (empty($_POST["password"])) {
-		
-		 	//empty, print error
+					//empty, print error
+					$passErr = "Password is empty";
+					$p = "1";
+					$val = false;
 		 
-	    } else {
-	    	$password = test_input($_POST["password"]);
-			$stmt = $dbh->prepare('SELECT * from users WHERE username=:name');
-			$stmt->bindParam(':name', $username);
-			$stmt->execute();
-			if ($stmt->rowCount() > 0){
-				$check = $stmt->fetch(PDO::FETCH_ASSOC);
-				$pword = $check['password'];
-				// unhash the password for varification
-				$hash = crypt($password, '$6$rounds=5000$4Ds0.2.A.F*pPi(8lxZ+H!3#l+s@wlek.!ls-$');
-				if ($pword==$hash) {
-					
-					//The password is good, login
-					echo 'yes!';
-					
 				} else {
 					
-					//the password is wrong, error
+					$password = test_input($_POST["password"]);
+					if ($stmt->rowCount() > 0){
+						$pword = $check['password'];
+						// unhash the password for varification
+						$hash = crypt($password, '$6$rounds=5000$4Ds0.2.A.F*pPi(8lxZ+H!3#l+s@wlek.!ls-$');
+						if ($pword==$hash) {
 					
+							//The password is good, fill the session vars and login
+							session_name('project');  
+							session_start();
+							$_SESSION["username"] = "";
+							$_SESSION["isAdmin"] = false;
+							$_SESSION["loggedIn"] = false;
+							$_SESSION["status"] = 0;
+							fill_session($check['username'], $check['admin'], $check['status']);
+							header('Location: index.php');
+					
+						} else {
+					
+							//the password is wrong, error
+							$passErr = "Incorrect password";
+							$p = "1";
+							$val = false;
+					
+						}
+					}
 				}
-		
+					
 			} else {
 	
 				//the username doesn't exist, so print an error
+				$nameErr = "Username does not exist";
+				$u = "1";
+				$val = false;
 			}
 		}
+	
+	//if it's valid
+	if ($val == true) {
+		
+		//redirect or something
+		
+	}
 	
 	
 	//close the connection
@@ -99,10 +119,29 @@ function test_input($data) {
    return $data;
 }
  
+//fill session variables
+function fill_session($un, $adm, $st){
+	$_SESSION["username"] = $un;
+	if ($adm == 1){
+		$_SESSION["isAdmin"] = true;
+	} else {
+		$_SESSION["isAdmin"] = false;
+	}
+	$_SESSION["loggedIn"] = true;
+	$_SESSION["status"] = $st;
+}
 
 ?>
-
+	<style>
+	.error {color: #3366ff;}
+	</style>
 	<h1 class="text-center">Have a new idea? Want to improve other ideas?</h1>
+	
+	<!-- Validation Boolean and Display-->
+	<span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if ($u == "1") {echo $nameErr."<br><br>"; $val = "0"; }}?></span>
+	<span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if ($p=="1") {echo $passErr."<br><br>"; $val = "0"; }}?></span>
+
+	
       <div id="login">
         <div class="panel panel-default" style="clear: both;">
           <div class="panel-heading">
@@ -114,7 +153,7 @@ function test_input($data) {
 
             <div class="form-group">        
               <div >
-                <input type="text" name="username" id="username" class="form-control" placeholder="Username" autofocus autocomplete="off">
+                <input type="text" value="<?php if (!empty($_POST['username'])) echo htmlspecialchars($_POST['username']); ?>" name="username" id="username" class="form-control" placeholder="Username" autofocus autocomplete="off">
               </div>
             </div>
 
