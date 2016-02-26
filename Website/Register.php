@@ -36,8 +36,8 @@ require_once('header.php');
 <!--Validation of entries-->	
 <?php
 // define variables and set to empty values
-$nameErr = $genderErr = $passErr = "";
-$name = $gender = $pass = "";
+$nameErr = $genderErr = $passErr = $dnameErr = $emailErr = "";
+$username = $dname = $gender = $email = $pass = "";
 $val = "1";
 $p = "0";
 $u = "0";
@@ -50,7 +50,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      $u = "1";
    } else {
      $username = test_input($_POST["username"]);
-     
      //check for the username in the db
 	 $username = test_input($_POST["username"]);
 	 $stmt = $dbh->prepare('SELECT * from users WHERE username=:name');
@@ -67,8 +66,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    if (empty($_POST["dname"])) {
      $dnameErr = "Display Name is required";
    } else {
-     $dname = test_input($_POST["dname"]);
+	 $dname = test_input($_POST["dname"]);
    } 
+   
+    //Email Validation
+   if (empty($_POST["email"])) {
+     $emailErr = "Email is required";
+   } else if(preg_match("/^.*[@]{1}.*\.*$/", $_POST["email"]) == 0){
+	 $email = test_input($_POST["email"]);
+	 $emailErr = "Email does not match required format: email[@]lawl[.]ca";
+   } 
+   else{
+	   $email = test_input($_POST["email"]);
+   }
+   
+   
+   
+   
+   
+   
 	//Gender validation
    if (empty($_POST["gender"])) {
      $genderErr = "Gender is required";
@@ -76,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      $gender = test_input($_POST["gender"]);
    }
 
-   //Gender validation
+   //password validation
    if (empty($_POST["password"])) {
      $passErr = "You must enter in a password";
 	 $p = "1";
@@ -103,6 +119,7 @@ function test_input($data) {
 <!-- Validation Boolean and Display-->
 <span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if (empty($_POST["gender"])) {echo $genderErr."<br><br>"; $val = "0";}} ?></span>
 <span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if ($u == "1") {echo $nameErr."<br><br>"; $val = "0"; }}?></span>
+<span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if (! $emailErr == "") {echo $emailErr."<br><br>"; $val = "0";}} ?></span>
 <span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if (empty($_POST["dname"])) {echo $dnameErr."<br><br>"; $val = "0";}} ?></span>
 <span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if ($p=="1") {echo $passErr."<br><br>"; $val = "0"; }}?></span>
 	 
@@ -122,20 +139,20 @@ function test_input($data) {
 			<br>
             <div class="form-group">        
               <div >
-                <input type="text" name="username" id="username" class="form-control" placeholder="Username" autofocus autocomplete="off">
+                <input type="text" name="username" id="username" class="form-control" placeholder="Username" autofocus autocomplete="off" value="<?php if(isset($username)) echo "$username";?>">
               </div>
             </div>
 			<!--Display Name-->
 			<div class="form-group">        
               <div >
-                <input type="text" name="dname" id="dname" class="form-control" placeholder="Display Name" autofocus autocomplete="off">
+                <input type="text" name="dname" id="dname" class="form-control" placeholder="Display Name" autofocus autocomplete="off" value="<?php if(isset($dname)) echo "$dname";?>">
               </div>
             </div>
 			<hr>
 			<!--Email-->
 			<div class="form-group">        
               <div >
-                <input type="email" id="email" name="email" class="form-control" placeholder="Email" autofocus autocomplete="off">
+                <input type="email" id="email" name="email" class="form-control" placeholder="Email" autofocus autocomplete="off" value="<?php if(isset($email)) echo "$email";?>">
               </div>
             </div>
 			<hr>
