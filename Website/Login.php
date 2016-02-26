@@ -10,6 +10,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$username = "";
 	$password = "";
 	
+	//connecting to the database
+	include('cred/cred.php');
 	//set credentials if they are not set already
 	if (!isset($dsn)) {
 		$dsn = 'mysql:host=localhost;dbname=brainstorm;port=8889';
@@ -58,11 +60,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			$stmt->execute();
 			if ($stmt->rowCount() > 0){
 				$check = $stmt->fetch(PDO::FETCH_ASSOC);
-				$hash = $check['password'];
+				$pword = $check['password'];
 				// unhash the password for varification
-				if (password_verify($password, $hash)) {
+				$hash = crypt($password, '$6$rounds=5000$4Ds0.2.A.F*pPi(8lxZ+H!3#l+s@wlek.!ls-$');
+				if ($pword==$hash) {
 					
 					//The password is good, login
+					echo 'yes!';
 					
 				} else {
 					

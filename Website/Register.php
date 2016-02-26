@@ -1,6 +1,7 @@
 <?php
 
 	//connecting to the database
+	include('cred/cred.php');
 	//set credentials if they are not set already
 	if (!isset($dsn)) {
 		$dsn = 'mysql:host=localhost;dbname=brainstorm;port=8889';
@@ -194,9 +195,10 @@ function test_input($data) {
 	
 	if ($_SERVER["REQUEST_METHOD"] == "POST" && $val=="1"){
 	//hash the password
-		$hash = password_hash($pass, PASSWORD_DEFAULT);
+		$hash = crypt($pass, '$6$rounds=5000$4Ds0.2.A.F*pPi(8lxZ+H!3#l+s@wlek.!ls-$');
 		$blank='';
 		$admin = 0;
+		$zero = 0;
 		//insert
 		$stmt = $dbh->prepare("INSERT INTO users (username, password, email, displayName, gender, picture, description, status, admin)
 							VALUES (:username, :password, :email, :displayName, :gender, :picture, :description, :status, :admin)");
@@ -207,7 +209,7 @@ function test_input($data) {
 		$stmt->bindParam(':gender', $gender);
 		$stmt->bindParam(':picture', $blank);
 		$stmt->bindParam(':description', $blank);
-		$stmt->bindParam(':status', $blank);
+		$stmt->bindParam(':status', $zero);
 		$stmt->bindParam(':admin', $admin);
 		$stmt->execute();
 	}
