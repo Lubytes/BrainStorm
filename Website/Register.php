@@ -81,10 +81,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    }
    
    
-   
-   
-   
-   
 	//Gender validation
    if (empty($_POST["gender"])) {
      $genderErr = "Gender is required";
@@ -136,29 +132,46 @@ function test_input($data) {
 
 			<!--Username-->
 			Identifiers:
-			<br>
+			
             <div class="form-group">        
               <div >
                 <input type="text" name="username" id="username" class="form-control" placeholder="Username" autofocus autocomplete="off" value="<?php if(isset($username)) echo "$username";?>">
               </div>
             </div>
 			<!--Display Name-->
+			
 			<div class="form-group">        
               <div >
                 <input type="text" name="dname" id="dname" class="form-control" placeholder="Display Name" autofocus autocomplete="off" value="<?php if(isset($dname)) echo "$dname";?>">
               </div>
             </div>
-			<hr>
+			
 			<!--Email-->
+			
 			<div class="form-group">        
               <div >
                 <input type="email" id="email" name="email" class="form-control" placeholder="Email" autofocus autocomplete="off" value="<?php if(isset($email)) echo "$email";?>">
               </div>
             </div>
-			<hr>
+			
+			<!--Gender-->
+			
+			<div class="form-group" id="ggender" style="">
+			   Gender:
+			   <input type="radio" name="gender" 
+			   <?php if(isset($gender) && $gender=="female") echo "checked";?>
+			   value="female">Female
+			   <input type="radio" name="gender" 
+			   <?php if(isset($gender) && $gender=="male") echo "checked";?>
+			   value="male">Male
+			   <input type="radio" name="gender" 
+			   <?php if(isset($gender) && $gender=="other") echo "checked";?>
+			   value="other">Other 
+			 </div>
+
 			<!--Password-->
 			Password:
-			<br>
+			
             <div class="form-group">  
               <div>
                 <input type="password" name="password" id="password" class="form-control" placeholder="Password" autocomplete="off">
@@ -170,21 +183,8 @@ function test_input($data) {
                 <input type="password" name="passwordConfirm" id="passwordConfirm" class="form-control" placeholder="Confirm Password" autocomplete="off">
               </div>
             </div>
-			<hr>
-			<!--Gender-->
-			<div class="form-group" id="ggender" style="">
-			   Identified Gender:
-			   <br>
-			   <input type="radio" name="gender" 
-			   <?php if(isset($gender) && $gender=="female") echo "checked";?>
-			   value="female">Female
-			   <input type="radio" name="gender" 
-			   <?php if(isset($gender) && $gender=="male") echo "checked";?>
-			   value="male">Male
-			   <input type="radio" name="gender" 
-			   <?php if(isset($gender) && $gender=="other") echo "checked";?>
-			   value="other">Other 
-			 </div>
+			
+			
 			
 			
 			
@@ -192,7 +192,7 @@ function test_input($data) {
 			
 			
 			<!--Register Button-->
-			<hr>
+			
             <div class="form-group">  
               <div >
                 <input type="submit" name="submit_login" value="Register" class="btn btn-default">

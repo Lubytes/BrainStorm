@@ -1,7 +1,5 @@
 <?php
 
-//require_once('Register.php');
-
 require_once('header.php');
 
 
