@@ -34,6 +34,18 @@
   </div>
 </div>
 
+      <div>
+        <div class="container" style="text-align: center">
+          © 2016 BrainStorm Inc.
+
+          <a href="#">About</a>
+          <a href="#">Help</a>
+          <a href="#">Terms</a>
+          <a href="#">Privacy</a>
+          <a href="#">Cookies</a>
+          <a href="#">Apps</a>
+        </div>
+      </div>
     
 
     <script src="jquery/jquery-1.11.2.min.js"></script>

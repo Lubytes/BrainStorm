@@ -16,7 +16,7 @@
     
     <style>
       .container {
-        max-width: 800px;
+        max-width: 940px;
       }
       textarea {
         resize: vertical;
@@ -29,7 +29,7 @@
   <body>
 
     <nav class="navbar navbar-default">
-    <div class="container" style="max-width: 800px;">
+    <div class="container" style="max-width: 940px;">
       <div class="navbar-header">
         <a class="navbar-brand" href="Login.php">BrainStorm Inc.</a>
       </div>
@@ -38,15 +38,17 @@
         <div class="input-group">
            <input type="text" class="form-control" placeholder="Search for...">
             <span class="input-group-btn">
-              <button class="btn btn-default" type="button">Go!</button>
+              <button class="btn btn-default" type="button" aria-label="...">
+                <span class="glyphicon glyphicon-search" ></span></button> 
             </span>
         </div>
       </form>
 
         <ul class="nav navbar-nav navbar-left">
-          <li><a href="Login.php">Welcome !</a></li>
-          <li><a href=" ">Look who else is using it !</a></li>
+          <li><a href="Login.php">Welcome User</a></li>
+          <li><a href=" ">User listing</a></li>
         </ul>
+
  
     </div>
     </nav>
