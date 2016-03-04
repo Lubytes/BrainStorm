@@ -44,8 +44,29 @@
 
   </head>
 
+
   <body >
 
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Message</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Nav -->
     <nav class="navbar navbar-default app-navbar">
     <div class="container" style="max-width: 940px;">
       <div class="navbar-header">
@@ -66,7 +87,7 @@
           <li><a href="account.php">Home</a></li>
           <li><a href="profile.php" data-action=" ">User Profile
             <span class="glyphicon glyphicon-user" ></span></a></li>
-          <li><a data-toggle="modal" href="#msgModal">Messages &amp; Notifications
+          <li><a data-toggle="modal" href="#msgModal"data-target="#msgModal">Messages &amp; Notifications
             <span class="glyphicon glyphicon-envelope" ></span></a></li>
           <li><a href="Login.php">Logout
             <span class="glyphicon glyphicon-off"></span></a></li>
@@ -75,6 +96,9 @@
     </div>
     </nav>
 
+
+
+<!-- the actual body -->
 <div class="container">
 
 <div class="row row-offcanvas row-offcanvas-left">
@@ -131,7 +155,7 @@
           <div class="input-group">
             <input type="text" class="form-control" placeholder="Message">
             <span class="input-group-btn">
-              <button class="btn btn-default" type="button" aria-label="...">
+              <button class="btn btn-default" type="button" aria-labelledby="..." data-toggle="modal" data-target="#myModal">
                 <span class="glyphicon glyphicon-comment"></span></button>
             </span>
           </div>
@@ -139,10 +163,14 @@
           <div class="jumbotron">
             <p> This part we can show all the interact between this user and other user! </p>
           <br>
-            <p> And their genius ideas!<p>
+            <p> And their genius ideas!</p>
+          <br>
+            <p>" in short, the period was so far like the present period, that some of its noisiest authorities insisted on its being received, for good or for evil, in the superlative degree of comparison only." </p>
+          <br>
+            <p>There are times that walk from you like some passing afternoon </p>
+          <br>
+            <p> When the routine bites hard And ambitions are low </p>
           </div>
-      
-
       </ul>
     </div>
 

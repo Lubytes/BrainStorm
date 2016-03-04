@@ -89,9 +89,9 @@
                 <h5 >
                   <a href="profile.php">Whimp</a>
                 </h5>
-
-                <p>Those dying here, the lonely</p><p>  forgotten by the world,  our tongue becomes for them </p><p> the language of an ancient planet.  Until, when all is legend </p><p> and many years have passed,  on a new Campo dei Fiori </p><p> rage will kindle at a poet's word.</p>
-    
+                  <p>Those dying here, the lonely</p><p>  forgotten by the world,  our tongue becomes for them </p><p> the language of an ancient planet.  Until, when all is legend </p><p> and many years have passed,  on a new Campo dei Fiori </p><p> rage will kindle at a poet's word.</p>
+                  <br>
+                  <p>--And if the fool, or the pig, are of a different opinion, it is because they only know their own side of the question. The other party to the comparison knows both sides-- </p>
           </div>
 
           <div class="row">
