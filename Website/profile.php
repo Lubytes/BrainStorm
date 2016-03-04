@@ -76,34 +76,50 @@
     </nav>
 
 <div class="container">
+<div class="row row-offcanvas row-offcanvas-right">
 
-<div class="row row-offcanvas">
-  <div class="col-lg-12">
+        <div class="col-xs-12 col-sm-9">
+          <p class="pull-right visible-xs">
+            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+          </p>
+          <div class="jumbotron">
+            <div style="background-image: url(assets/img/iceland.jpg);"></div>
+              <a href="profile.php"><img src=""></a>
 
-  <div class="row">
-    <div class="col-lg-8">
-      <div class="jumbotron">
-      <div style="background-image: url(assets/img/iceland.jpg);"></div>
-          <a href="profile.php"><img src=""></a>
+                <h5 >
+                  <a href="profile.php">Whimp</a>
+                </h5>
 
-          <h5 >
-            <a href="profile.php">Whimp</a>
-          </h5>
-
-          <p>I feel sad because of whom I never was. I hate the everythingness of everything.</p>
-
-      </div><!-- jumble end-->
-    </div><!-- col-lg-8 end-->
-  </div><!-- column end-->
-  </div><!-- col-lg-12 end-->
-</div>
+                <p>Those dying here, the lonely</p><p>  forgotten by the world,  our tongue becomes for them </p><p> the language of an ancient planet.  Until, when all is legend </p><p> and many years have passed,  on a new Campo dei Fiori </p><p> rage will kindle at a poet's word.</p>
     
+          </div>
 
+          <div class="row">
+            <div class="col-xs-12 col-lg-6">
+              <h2>Achievement</h2>
+              <p>Nothing right now. No clue for this page so far</p>
+              <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+            </div><!--/.col-xs-6.col-lg-4-->
+            
+          </div><!--/row-->
+        </div><!--/.col-xs-12.col-sm-9-->
+
+      <!-- link -->
+      <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+          <div class="list-group">
+            <a href="#" class="list-group-item active">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+          </div>
+        </div><!--/.sidebar-offcanvas-->
+      </div><!--/row-->
 
 </div> <!--container end-->
 
-      <div>
-        <div class="container" style="text-align: center">
+      <div class="mastfoot">
+          <div class="inner" style="text-align: center">
           © 2016 BrainStorm Inc.
 
           <a href="#">About</a>
