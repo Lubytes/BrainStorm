@@ -93,23 +93,6 @@
           </h5>
 
           <p>I feel sad because of whom I never was. I hate the everythingness of everything.</p>
-
-          <div class="row" >
-          <ul>
-          <li>
-            <a href="#userModal"  data-toggle="modal">
-                Friends
-                <h5 >300</h5>
-              </a>
-          </li>
-          <li>
-              <a href="#userModal" data-toggle="modal">
-                Followers
-                <h5 >12M</h5>
-              </a>
-          </li>
-          </ul>
-        </div>
         
         <br>
          <div >
@@ -167,7 +150,7 @@
     <div class="col-md-3 ">
       <div class="jumbotron">
         <div >
-        <h5 >Friends <small>· <a href="#">View All</a></small></h5>
+        <h5 >Friends <small>· <a href="#userModal"  data-toggle="modal">View All</a></small></h5>
         <ul >
           <li >
             <a href="#">
@@ -225,6 +208,43 @@
       
         <div>
           Emma really likes these nerds, no one knows why though.
+        </div>
+      
+      </div>
+
+       <br>
+
+      <div >
+        <h5 >Followers <small>· <a href="#userModal"  data-toggle="modal">View All</a></small></h5>
+        <ul >
+          <li >
+            <a href="#">
+              <img src="">
+            </a>
+            <div>
+              <strong>John</strong> @john
+              <div >
+                <button >
+                  <span ></span> Follow</button>
+              </div>
+            </div>
+          </li>
+           <li >
+            <a href="#">
+              <img src="">
+            </a>
+            <div >
+              <strong>Amy</strong> @amy
+              <div >
+                <button >
+                  <span ></span> Follow</button></button>
+              </div>
+            </div>
+          </li>
+        </ul>
+      
+        <div>
+          John just followed you.
         </div>
       
       </div>
