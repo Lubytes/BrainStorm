@@ -64,7 +64,7 @@
 
         <ul class="nav navbar-nav navbar-left">
           <li><a href="account.php">Home</a></li>
-          <li><a href="#" data-action=" ">User Profile
+          <li><a href="profile.php" data-action=" ">User Profile
             <span class="glyphicon glyphicon-user" ></span></a></li>
           <li><a data-toggle="modal" href="#msgModal">Messages &amp; Notifications
             <span class="glyphicon glyphicon-envelope" ></span></a></li>
@@ -86,10 +86,10 @@
     <div class="col-md-3 ">
       <div class="jumbotron">
       <div style="background-image: url(assets/img/iceland.jpg);"></div>
-          <a href="profile.html"><img src=""></a>
+          <a href="profile.php"><img src=""></a>
 
           <h5 >
-            <a href="profile.html">Whimp</a>
+            <a href="profile.php">Whimp</a>
           </h5>
 
           <p>I feel sad because of whom I never was. I hate the everythingness of everything.</p>
@@ -171,7 +171,7 @@
         </ul>
       
         <div>
-          Jennifer just visit your page
+          Jennifer just visit your page.
         </div>
      </div >
    

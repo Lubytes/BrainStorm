@@ -143,7 +143,7 @@ function fill_session($un, $adm, $st){
       <div id="login">
         <div class="panel panel-default" style="clear: both;">
           <div class="panel-heading">
-            <h2 class="panel-title">Just Login!</h2>
+            <h2 class="panel-title">Login in Please!</h2>
           </div>
           <div class="panel-body">  
 
@@ -161,9 +161,15 @@ function fill_session($un, $adm, $st){
               </div>
             </div>
 
+            <div class="checkbox">
+          		<label>
+            	<input type="checkbox" value="remember-me"> Remember me
+          		</label>
+        	</div>
+
             <div class="form-group">  
               <div >
-                <input type="submit" name="submit_login" value="Sign in" class="btn btn-default">
+                <input class="btn btn-lg btn-primary btn-block" type="submit" name="submit_login" value="Sign in" class="btn btn-default">
               </div>
             </div>
             
