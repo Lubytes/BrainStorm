@@ -180,23 +180,13 @@ function test_input($data) {
       <div id="selection">
         <div class="panel panel-default" style="clear: both;">
           <div class="panel-heading">
-            <h2 class="panel-title">Choose a group to manage</h2>
+            <h2 class="panel-title">Search Group</h2>
           </div>
           <div class="panel-body">  
 
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
 
-            <div class="form-group">        
-              <div >
-                <select name = "groupbox" class="combobox">
-
-					//dropdown contents
-					<?php echo $grouplist; ?>
-					
-				  </select>
-              </div>
-            </div>
-
+            
             <div class="form-group">  
               <div >
                 <input class="btn btn-lg btn-primary btn-block" type="submit" name="submit_login" value="Submit" class="btn btn-default">
@@ -214,36 +204,10 @@ function test_input($data) {
 	<div id="groups">
         <div class="panel panel-default" style="clear: both;">
           <div class="panel-heading">
-            <h2 class="panel-title">Manage <?php echo $groupname; ?></h2>
+            <h2 class="panel-title">Results</h2>
           </div>
           <div class="panel-body">  
-			<h4>Current Members</h4>
-			<form action="GroupUserRemove.php" method="post" >
-			<div class="form-group">
-				<div class="form-group"> 
-            		<?php echo $memberlist ?>
-            		<input type="hidden" name="gID" value="<?php echo $gID; ?>" />
-            	</div>
-            	<div class="form-group">  
-				  <div >
-					<input type="submit" name="submit_login" value="Remove Selected Members" class="btn btn-default">
-				  </div>
-				</div>
-            </div>
-        	</form>
-            <h4>Pending Members</h4>
-            <form action="GroupPending.php" method="post" >
-			<div class="form-group">
-				<div class="form-group"> 
-            		<?php echo $memberpend ?>
-            		<input type="hidden" name="gID" value="<?php echo $gID; ?>" />
-            	</div>
-            	<div class="form-group">  
-				  <div >
-					<input type="submit" name="submit_approve" value="Approve Selected Members" class="btn btn-default"> <input type="submit" name="submit_reject" value="Reject Selected Members" class="btn btn-default">
-				  </div>
-				</form>
-            </div>
+			
             
 
           </div> <!-- /.panel-body -->

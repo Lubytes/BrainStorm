@@ -47,6 +47,14 @@
         <ul class="nav navbar-nav navbar-left">
           <li><a href="Login.php">Welcome User</a></li>
           <li><a href=" ">User listing</a></li>
+          <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-hashpopup="true" aria-expanded="false">Groups</a>
+          	<ul class="dropdown-menu">
+			  <li role="presentation"><a role="menuitem" tabindex="-1" href="ManageGroups.php">Manage Groups</a></li>
+			  <li role="presentation"><a role="menuitem" tabindex="-1" href="CreateGroup.php">Create Group</a></li>
+			  <li role="presentation"><a role="menuitem" tabindex="-1" href="SearchGroups.php">Search Groups</a></li>
+			</ul>
+			</li>
         </ul>
 
  
