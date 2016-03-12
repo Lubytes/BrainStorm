@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 							$_SESSION["loggedIn"] = false;
 							$_SESSION["status"] = 0;
 							fill_session($check['username'], $check['admin'], $check['status']);
-							header('Location: index.php');
+							header('Location: account.php');
 					
 						} else {
 					
