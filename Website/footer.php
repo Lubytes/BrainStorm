@@ -42,7 +42,7 @@
           <a href="#">Help</a>
           <a href="#">Terms</a>
           <a href="#">Privacy</a>
-          <a href="#">Cookies</a>
+          <a href="./Footer pages/cookies">Cookies</a>
           <a href="#">Apps</a>
         </div>
       </div>
