@@ -122,10 +122,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 				{
 					$groupmembers[$i] = $row['username'];
 					if ($groupmembers[$i]==$creator){
-						$memberlist .= '<p>Creator: <a href="profile.php?username='.$groupmembers[$i].'">'.$groupmembers[$i].'</a></p>';
+						$memberlist .= '<p>Creator: <a href="profile.php?uID='.$groupmembers[$i].'">'.$groupmembers[$i].'</a></p>';
 					} else {
 						$memberlist .= '<div class="checkbox"><label><input type="checkbox" name="checkusers[]" value="'.$groupmembers[$i].'">
-									<a href="profile.php?username='.$groupmembers[$i].'">'.$groupmembers[$i].'</a></label></div>';
+									<a href="profile.php?uID='.$groupmembers[$i].'">'.$groupmembers[$i].'</a></label></div>';
 					}
 					$i++;
 				}

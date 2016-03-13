@@ -1,3 +1,133 @@
+<?php
+//start the session. if the user is logged in, display creation form.
+session_name('project');  
+session_start();
+
+//session vars
+$username = $_SESSION["username"];
+$isAdmin = $_SESSION["isAdmin"];
+$loggedIn = $_SESSION["loggedIn"];
+$status = $_SESSION["status"];
+$img = $_SESSION["img"];
+
+//we want to get the uID from the URL
+$uID = htmlspecialchars($_GET["uID"]);
+$displayName = "";
+$displayProfile = "";
+$displayImg = "";
+$displayGender = "";
+$groupList = "";
+
+$postsList = "";
+
+
+//connecting to the database
+	if (file_exists('cred/cred.php')){
+		include('cred/cred.php');
+	}
+	//set credentials if they are not set already
+	if (!isset($dsn)) {
+		$dsn = 'mysql:host=localhost;dbname=brainstorm;port=8889';
+	}
+	if (!isset($dbname)) {
+		$dbname = 'root';
+	}
+	if (!isset($dbpword)) {
+		$dbpword = 'root';
+	}
+	
+	try {
+		$dbh = new PDO($dsn, $dbname, $dbpword);
+	
+		//get user info
+		$stmt = $dbh->prepare("SELECT * FROM users WHERE username=:uID");
+		$stmt->bindParam(':uID', $uID);
+		$stmt->execute();
+		if ($stmt->rowCount() > 0) {
+			while($row=$stmt->fetch(PDO::FETCH_ASSOC))
+			{
+				$displayName = $row["displayName"];
+				$displayProfile = $row["description"];
+				$displayImg = $row["picture"];
+				$displayGender = $row["gender"];
+				
+				//fill empty images
+				if (empty($displayImg)){
+					//blank profile image here
+					$displayImg = "img/profile/blank.png";
+				}
+				
+			}
+		}
+		
+	//get the user's groups
+	$stmt = $dbh->prepare("SELECT * FROM in_group JOIN groups ON groups.groupID=in_group.groupID WHERE in_group.username=:uID");
+	$stmt->bindParam(':uID', $uID);
+	$stmt->execute();
+	if ($stmt->rowCount() > 0) {
+		while($row=$stmt->fetch(PDO::FETCH_ASSOC))
+		{
+			//get all groups and their names
+			$groupID = $row["groupID"];
+			$groupname = $row["groupname"];
+			$groupList .= '<a href="Group.php?gID='.$groupID.'" class="list-group-item">'.$groupname.'</a>';		
+		}
+	}
+	
+	//get the user's posts
+	$stmt = $dbh->prepare("SELECT * FROM posts JOIN groups ON posts.groupID=groups.groupID WHERE username=:uID");
+	$stmt->bindParam(':uID', $uID);
+	$stmt->execute();
+	if ($stmt->rowCount() > 0) {
+		while($row=$stmt->fetch(PDO::FETCH_ASSOC))
+		{
+			//get all groups and their names
+			$postsList .= create_post($row["post_ID"], $row["head"], $row["type"], $row["date"], $row["content"], 
+			$row["title"], $row["image"], $row["rating"], $row["username"], $row["groupID"], $row["groupname"]);		
+		}
+	}
+	
+	//close the connection
+	$dbh = null;
+	
+	} catch (PDOException $e) {
+		print "Error!: " . $e->getMessage() . "<br/>";
+		die();
+	} 
+	
+function create_post($post_ID, $head, $type, $date, $content, $title, $image, $rating, $username, $groupID, $groupName){
+	if ($post_ID > 1) {
+		//get the correct post page
+		$link = 0;
+		$groupN = "";
+		if ($head==1){
+			$link = $post_ID;
+		} else {
+			$link = $head;
+		}
+		//set everyone group to everyone
+		if ($groupID==1){
+			$groupN = "Public";
+		} else {
+			$groupN = $groupname;
+		}
+		//make the string
+		return '<div class="panel panel-info panel-post">
+				<div class="panel-heading">
+				  <h3 class="panel-title"><a href="Posts.php?head='.$link.'">'.$title.'</a></h3>
+				</div>
+				<div class="panel-body">
+				  <p class="post_content">'.$content.'</p>
+				  <p class="post_rating">Rating: '.$rating.'</p>
+				  <p class="post_group">Group: <a href="Group.php?gID='.$groupID.'">'.$groupN.'</a>
+				</div>
+				</div>';
+		} else {
+			return null;
+		}
+}	
+
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -12,6 +142,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
 
     
     <style>
@@ -64,11 +195,22 @@
 
         <ul class="nav navbar-nav navbar-left">
           <li><a href="account.php">Home</a></li>
-          <li><a href="profile.php" data-action=" ">User Profile
-            <span class="glyphicon glyphicon-user" ></span></a></li>
-          <li><a data-toggle="modal" href="#msgModal">Messages &amp; Notifications
+          
+          <?php if (isset($_SESSION["username"]) && !empty($_SESSION["username"])) { echo '<li><a href="profile.php?uID='.$_SESSION["username"].'" data-action=" ">User Profile
+            <span class="glyphicon glyphicon-user" ></span></a></li>'; } ?>
+          
+          
+          <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-hashpopup="true" aria-expanded="false">Groups</a>
+          	<ul class="dropdown-menu">
+			  <li role="presentation"><a role="menuitem" tabindex="-1" href="ManageGroups.php">Manage Groups</a></li>
+			  <li role="presentation"><a role="menuitem" tabindex="-1" href="CreateGroup.php">Create Group</a></li>
+			  <li role="presentation"><a role="menuitem" tabindex="-1" href="SearchGroups.php">Search Groups</a></li>
+			</ul>
+			</li>
+			<li><a data-toggle="modal" href="#msgModal">Notifications
             <span class="glyphicon glyphicon-envelope" ></span></a></li>
-          <li><a href="Login.php">Logout
+			<li><a href="Logout.php">Logout
             <span class="glyphicon glyphicon-off"></span></a></li>
         </ul>
  
@@ -86,32 +228,35 @@
             <div style="background-image: url(assets/img/iceland.jpg);"></div>
               <a href="profile.php"><img src=""></a>
 
-                <h5 >
-                  <a href="profile.php">Whimp</a>
-                </h5>
-                  <p>Those dying here, the lonely</p><p>  forgotten by the world,  our tongue becomes for them </p><p> the language of an ancient planet.  Until, when all is legend </p><p> and many years have passed,  on a new Campo dei Fiori </p><p> rage will kindle at a poet's word.</p>
-                  <br>
-                  <p>--And if the fool, or the pig, are of a different opinion, it is because they only know their own side of the question. The other party to the comparison knows both sides-- </p>
+                <h3>
+                  <?php echo '<img src="'.$displayImg.'" class="profile_img" />'; ?> <?php echo $displayName; ?>
+                </h3>
+                	<p>
+                  <?php echo "Gender: " . $displayGender; ?>
+                  </p>
+                  <p>
+                  <?php echo $displayProfile; ?>
+                  <?php if ($username == $uID) { 
+                  	echo "</p>".
+                  		'<a href="#">Upload new profile image</a><br />'.
+                  		'<a href="#">Edit Profile Description</a>';  
+                  } 
+                  
+                  ?>
+                  </p>
           </div>
 
           <div class="row">
-            <div class="col-xs-12 col-lg-6">
-              <h2>Achievement</h2>
-              <p>Nothing right now. No clue for this page so far</p>
-              <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-            </div><!--/.col-xs-6.col-lg-4-->
-            
+            <h2>Posts</h2>
+              <?php echo $postsList; ?>
           </div><!--/row-->
         </div><!--/.col-xs-12.col-sm-9-->
 
-      <!-- link -->
+      <!-- groups -->
       <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+      	<h4>Member of:</h4>
           <div class="list-group">
-            <a href="#" class="list-group-item active">Link</a>
-            <a href="#" class="list-group-item">Link</a>
-            <a href="#" class="list-group-item">Link</a>
-            <a href="#" class="list-group-item">Link</a>
-            <a href="#" class="list-group-item">Link</a>
+            <?php echo $groupList; ?>
           </div>
         </div><!--/.sidebar-offcanvas-->
       </div><!--/row-->

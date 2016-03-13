@@ -68,7 +68,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 							$_SESSION["isAdmin"] = false;
 							$_SESSION["loggedIn"] = false;
 							$_SESSION["status"] = 0;
-							fill_session($check['username'], $check['admin'], $check['status']);
+							$_SESSION["img"] = "";
+							fill_session($check['username'], $check['admin'], $check['status'], $check['picture']);
 							header('Location: account.php');
 					
 						} else {
@@ -118,7 +119,7 @@ function test_input($data) {
 }
  
 //fill session variables
-function fill_session($un, $adm, $st){
+function fill_session($un, $adm, $st, $pic){
 	$_SESSION["username"] = $un;
 	if ($adm == 1){
 		$_SESSION["isAdmin"] = true;
@@ -127,6 +128,12 @@ function fill_session($un, $adm, $st){
 	}
 	$_SESSION["loggedIn"] = true;
 	$_SESSION["status"] = $st;
+	if (empty($pic)){
+		//blank profile image here
+		$S_SESSION["img"] = "img/profile/blank.png";
+	} else {
+		$S_SESSION["img"] = $pic;
+	}
 }
 
 ?>

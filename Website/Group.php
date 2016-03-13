@@ -94,6 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		print "Error!: " . $e->getMessage() . "<br/>";
 		die();
 	} 
+	$joinbutton = "<br /><br />Request sent sucessfully";
 
 }
 	

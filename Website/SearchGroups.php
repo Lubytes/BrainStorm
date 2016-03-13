@@ -8,7 +8,7 @@ require_once('header.php');
 $username = '';
 $description = '';
 $groupname = '';
-$grouplist = '';
+$results = '';
 $groupmembers = array();
 $nameErr = $descErr = $loginErr = "";
 $g = $d = $l = '0';
@@ -25,65 +25,13 @@ echo '<style>
 if ($_SESSION["loggedIn"] == true) {
 	$l = '0';
 	$username = $_SESSION["username"];
-	echo '<style>
-			#selection {
-				visibility: visible;
-				display: block;
-			}
-			</style>';
+
 } else {
 	$l = '1'; //user isn't logged in
 	$loginErr = "You must be logged in to manage a group.";
-	echo '<style>
-			#selection {
-				visibility: hidden;
-				display: none;
-				max-height:0;
-				line-height:0;
-				height: 0;
-				overflow: hidden;
-			}
-			</style>';
 }
 
-//connecting to the database
-	if (file_exists('cred/cred.php')){
-		include('cred/cred.php');
-	}
-	//set credentials if they are not set already
-	if (!isset($dsn)) {
-		$dsn = 'mysql:host=localhost;dbname=brainstorm;port=8889';
-	}
-	if (!isset($dbname)) {
-		$dbname = 'root';
-	}
-	if (!isset($dbpword)) {
-		$dbpword = 'root';
-	}
 
-	try {
-		$dbh = new PDO($dsn, $dbname, $dbpword);
-		
-		//get the group names that this user belongs to
-		$stmt = $dbh->prepare('SELECT * FROM groups WHERE creator=:username');
-		$stmt->bindParam(':username', $username);
-		$stmt->execute();
-		if ($stmt->rowCount() > 0) {
-			while($row=$stmt->fetch(PDO::FETCH_ASSOC))
-			{
-				$ID = $row['groupID'];
-				$gName = $row['groupname'];
-				$grouplist.='<option value="'.$ID.'">'.$gName.'</option>';
-			}
-			//$groupID = $check['groupID'];
-		}
-		//close the connection
-		$dbh = null;
-
-	} catch (PDOException $e) {
-		print "Error!: " . $e->getMessage() . "<br/>";
-		die();
-	} 
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -95,55 +43,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			}
 		</style>';
 		
-		$gID = test_input($_POST["groupbox"]);
+		$keywords = $_POST['keywords'];
+		$key = explode(" ", $keywords);
+		print_r($key);
+		
+		//connecting to the database
+		if (file_exists('cred/cred.php')){
+			include('cred/cred.php');
+		}
+		//set credentials if they are not set already
+		if (!isset($dsn)) {
+			$dsn = 'mysql:host=localhost;dbname=brainstorm;port=8889';
+		}
+		if (!isset($dbname)) {
+			$dbname = 'root';
+		}
+		if (!isset($dbpword)) {
+			$dbpword = 'root';
+		}
 		
 		try {
 			$dbh = new PDO($dsn, $dbname, $dbpword);
 		
-			//get the right group
-			$stmt = $dbh->prepare('SELECT * FROM groups WHERE groupID=:groupID');
-			$stmt->bindParam(':groupID', $gID);
+			//search by keyword
+			$stmt = $dbh->prepare("SELECT * FROM groups WHERE groupname LIKE :keyword");
+			$kw = '%'.$keywords.'%';
+			$stmt->bindParam(':keyword', $kw);
 			$stmt->execute();
 			if ($stmt->rowCount() > 0) {
 				while($row=$stmt->fetch(PDO::FETCH_ASSOC))
 				{
-					$groupname = $row['groupname'];
-					$creator = $row['creator'];
-				}
-				//$groupID = $check['groupID'];
-			}
-			//get the right members
-			$stmt = $dbh->prepare('SELECT * FROM in_group WHERE groupID=:groupID');
-			$stmt->bindParam(':groupID', $gID);
-			$stmt->execute();
-			if ($stmt->rowCount() > 0) {
-				$i = 0;
-				while($row=$stmt->fetch(PDO::FETCH_ASSOC))
-				{
-					$groupmembers[$i] = $row['username'];
-					if ($groupmembers[$i]==$creator){
-						$memberlist .= '<p>Creator: <a href="profile.php?username='.$groupmembers[$i].'">'.$groupmembers[$i].'</a></p>';
-					} else {
-						$memberlist .= '<div class="checkbox"><label><input type="checkbox" name="checkusers[]" value="'.$groupmembers[$i].'">
-									<a href="profile.php?username='.$groupmembers[$i].'">'.$groupmembers[$i].'</a></label></div>';
-					}
-					$i++;
-				}
-				//$groupID = $check['groupID'];
-			}
-			
-			//get the pending members
-			$stmt = $dbh->prepare('SELECT * FROM pending_group WHERE groupID=:groupID');
-			$stmt->bindParam(':groupID', $gID);
-			$stmt->execute();
-			if ($stmt->rowCount() > 0) {
-				$i = 0;
-				while($row=$stmt->fetch(PDO::FETCH_ASSOC))
-				{
-					$groupmembers[$i] = $row['username'];
-					$memberpend .= '<div class="checkbox"><label><input type="checkbox" name="checkusers[]" value="'.$groupmembers[$i].'">
-									<a href="profile.php?username='.$groupmembers[$i].'">'.$groupmembers[$i].'</a></label></div>';
-					$i++;
+					$results .= '<p><a href="Group.php?gID='.$row['groupID'].'">'.$row['groupname'].'</a></p>';
 				}
 				//$groupID = $check['groupID'];
 			}
@@ -186,10 +116,15 @@ function test_input($data) {
 
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
 
-            
+            <div class="form-group">        
+              <div >
+                <input type="text" value="<?php if (!empty($_POST['keywords'])) echo htmlspecialchars($_POST['keywords']); ?>" name="keywords" id="keywords" class="form-control" placeholder="Search" autofocus autocomplete="off">
+              </div>
+            </div>
+
             <div class="form-group">  
               <div >
-                <input class="btn btn-lg btn-primary btn-block" type="submit" name="submit_login" value="Submit" class="btn btn-default">
+                <input class="btn btn-lg btn-primary btn-block" type="submit" name="submit_search" value="Search" class="btn btn-default">
               </div>
             </div>
             
@@ -208,7 +143,7 @@ function test_input($data) {
           </div>
           <div class="panel-body">  
 			
-            
+            <?php echo $results; ?>
 
           </div> <!-- /.panel-body -->
         </div> <!-- /.panel -->

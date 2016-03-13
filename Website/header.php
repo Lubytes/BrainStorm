@@ -45,8 +45,12 @@
       </form>
 
         <ul class="nav navbar-nav navbar-left">
-          <li><a href="Login.php">Welcome User</a></li>
-          <li><a href=" ">User listing</a></li>
+          <li><a href="account.php">Home</a></li>
+          
+          <?php if (isset($_SESSION["username"])) { echo '<li><a href="profile.php?uID='.$_SESSION["username"].'" data-action=" ">User Profile
+            <span class="glyphicon glyphicon-user" ></span></a></li>'; } ?>
+          
+          
           <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-hashpopup="true" aria-expanded="false">Groups</a>
           	<ul class="dropdown-menu">
@@ -55,6 +59,10 @@
 			  <li role="presentation"><a role="menuitem" tabindex="-1" href="SearchGroups.php">Search Groups</a></li>
 			</ul>
 			</li>
+			<li><a data-toggle="modal" href="#msgModal">Notifications
+            <span class="glyphicon glyphicon-envelope" ></span></a></li>
+			<li><a href="Logout.php">Logout
+            <span class="glyphicon glyphicon-off"></span></a></li>
         </ul>
 
  
