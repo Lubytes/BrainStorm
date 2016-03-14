@@ -359,14 +359,11 @@ function test_input($data) {
     </script>
     
     
-    <!-- Update Image Modal -->
-	<div id="imgModal" class="modal fade" role="dialog">
-	  <div class="modal-dialog">
+    <?php include "Modal_image.php"; ?>
 
-		<?php include "Modal_bio.php"; ?>
+	<?php include "Modal_bio.php"; ?>
 
-	  </div>
-	</div>
+	  
     
   </body>
 </html>
