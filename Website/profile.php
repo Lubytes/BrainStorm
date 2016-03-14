@@ -20,6 +20,8 @@ $groupList = "";
 
 $postsList = "";
 
+$modal = "";
+
 
 //connecting to the database
 	if (file_exists('cred/cred.php')){
@@ -95,6 +97,48 @@ $postsList = "";
 		die();
 	} 
 	
+	
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	$dname = test_input($_POST["dname"]);
+	$bio = test_input($_POST["bio"]);
+	$modal = test_input($_POST["modal"]);
+	try {
+		$dbh = new PDO($dsn, $dbname, $dbpword);
+
+
+	   //if bio form and display name change
+	   if ($modal=="bio" && empty($_POST["dname"])) {
+		 //don't change
+	   } else {
+		 //change
+			$stmt = $dbh->prepare("UPDATE users SET displayName=:dname WHERE username=:username");
+			$stmt->bindParam(':username', $username);
+			$stmt->bindParam(':dname', $dname);
+			$stmt->execute();
+	 
+	   }
+		//Display Name Validation
+	   if ($modal=="bio" && empty($_POST["bio"])) {
+		 //don't change
+	   } else {
+		 //change
+		 $stmt = $dbh->prepare("UPDATE users SET description=:bio WHERE username=:username");
+		$stmt->bindParam(':username', $username);
+		$stmt->bindParam(':bio', $bio);
+		$stmt->execute();
+	   } 
+   
+   
+		//close the connection
+		$dbh = null;
+
+	} catch (PDOException $e) {
+		print "Error!: " . $e->getMessage() . "<br/>";
+		die();
+	}
+	header("Location: profile.php?uID=$username");
+}
+	
 function create_post($post_ID, $head, $type, $date, $content, $title, $image, $rating, $username, $groupID, $groupName){
 	if ($post_ID > 1) {
 		//get the correct post page
@@ -122,10 +166,19 @@ function create_post($post_ID, $head, $type, $date, $content, $title, $image, $r
 				  <p class="post_group">Group: <a href="Group.php?gID='.$groupID.'">'.$groupN.'</a>
 				</div>
 				</div>';
-		} else {
-			return null;
-		}
-}	
+	} else {
+		return null;
+	}
+}
+		
+function test_input($data) {
+   $data = trim($data);
+   $data = stripslashes($data);
+   $data = htmlspecialchars($data);
+   return $data;
+}
+
+	
 
 ?>
 <!DOCTYPE html>
@@ -166,9 +219,12 @@ function create_post($post_ID, $head, $type, $date, $content, $title, $image, $r
         font-weight: 300;
         padding-left:15px;
         padding-right:15px;
-        position: relative;
 
       }
+      
+      .modal-backdrop {
+		  z-index: -1;
+		}
 
     </style>
 
@@ -218,6 +274,9 @@ function create_post($post_ID, $head, $type, $date, $content, $title, $image, $r
     </nav>
 
 <div class="container">
+
+
+
 <div class="row row-offcanvas row-offcanvas-right">
 
         <div class="col-xs-12 col-sm-9">
@@ -238,12 +297,18 @@ function create_post($post_ID, $head, $type, $date, $content, $title, $image, $r
                   <?php echo $displayProfile; ?>
                   <?php if ($username == $uID) { 
                   	echo "</p>".
-                  		'<a href="#">Upload new profile image</a><br />'.
-                  		'<a href="#">Edit Profile Description</a>';  
+                  		' <!-- Trigger the modal with a button -->
+					<button type="button" class="btn btn-info" data-toggle="modal" data-target="#imgModal">Upload new image</button>
+						<br /><br />'.
+                  		'<button type="button" class="btn btn-info" data-toggle="modal" data-target="#bioModal">Update bio</button>';  
                   } 
                   
                   ?>
                   </p>
+                  
+                 
+
+                  
           </div>
 
           <div class="row">
@@ -292,5 +357,16 @@ function create_post($post_ID, $head, $type, $date, $content, $title, $image, $r
         }
       })
     </script>
+    
+    
+    <!-- Update Image Modal -->
+	<div id="imgModal" class="modal fade" role="dialog">
+	  <div class="modal-dialog">
+
+		<?php include "Modal_bio.php"; ?>
+
+	  </div>
+	</div>
+    
   </body>
 </html>
