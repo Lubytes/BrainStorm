@@ -174,7 +174,7 @@ function test_input($data) {
 	<!-- Validation Boolean and Display-->
 	<span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if ($g == "1") {echo $nameErr."<br><br>"; $val = false; }}?></span>
 	<span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if ($d=="1") {echo $descErr."<br><br>"; $val = false; }}?></span>
-	<span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if ($l=="1") {echo $loginErr."<br><br>"; $val = false; }}?></span>
+	<span class="error"> <?php if ($l=="1") {echo $loginErr."<br><br>"; $val = false; }?></span>
 
 	
       <div id="selection">

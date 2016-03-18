@@ -90,7 +90,7 @@ session_start();
 
         <ul class="nav navbar-nav navbar-left">
           <li><a href="account.php">Home</a></li>
-          
+          <?php if (!isset($_SESSION["username"])) { echo '<li><a href="Login.php">Login</a></li>'; } ?>
           <?php if (isset($_SESSION["username"]) && !empty($_SESSION["username"])) { echo '<li><a href="profile.php?uID='.$_SESSION["username"].'" data-action=" ">User Profile
             <span class="glyphicon glyphicon-user" ></span></a></li>'; } ?>
           

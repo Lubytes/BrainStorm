@@ -1,6 +1,6 @@
 <?php
 
-require_once('header.php');
+
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -135,7 +135,7 @@ function fill_session($un, $adm, $st, $pic){
 		$S_SESSION["img"] = $pic;
 	}
 }
-
+require_once('header.php');
 ?>
 	<style>
 	.error {color: #3366ff;}

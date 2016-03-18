@@ -84,7 +84,7 @@ $modal = "";
 		while($row=$stmt->fetch(PDO::FETCH_ASSOC))
 		{
 			//get all groups and their names
-			$postsList .= create_post($row["post_ID"], $row["head"], $row["type"], $row["date"], $row["content"], 
+			$postsList .= create_post($row["post_ID"], $row["head"], $row["type"], $row["date_time"], $row["content"], 
 			$row["title"], $row["image"], $row["rating"], $row["username"], $row["groupID"], $row["groupname"]);		
 		}
 	}
@@ -161,6 +161,7 @@ function create_post($post_ID, $head, $type, $date, $content, $title, $image, $r
 				  <h3 class="panel-title"><a href="Posts.php?head='.$link.'">'.$title.'</a></h3>
 				</div>
 				<div class="panel-body">
+				  <p class ="post_date">'.$date.'</p>
 				  <p class="post_content">'.$content.'</p>
 				  <p class="post_rating">Rating: '.$rating.'</p>
 				  <p class="post_group">Group: <a href="Group.php?gID='.$groupID.'">'.$groupN.'</a>
@@ -251,7 +252,7 @@ function test_input($data) {
 
         <ul class="nav navbar-nav navbar-left">
           <li><a href="account.php">Home</a></li>
-          
+          <?php if (!isset($_SESSION["username"])) { echo '<li><a href="Login.php">Login</a></li>'; } ?>
           <?php if (isset($_SESSION["username"]) && !empty($_SESSION["username"])) { echo '<li><a href="profile.php?uID='.$_SESSION["username"].'" data-action=" ">User Profile
             <span class="glyphicon glyphicon-user" ></span></a></li>'; } ?>
           

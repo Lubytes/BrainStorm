@@ -24,7 +24,7 @@ if ($_SESSION["loggedIn"] == true) {
 
 } else {
 	$l = '1'; //user isn't logged in
-	$loginErr = "You must be logged in to manage a group.";
+	$loginErr = "You must be logged in to join a group.";
 
 }
 
@@ -63,7 +63,7 @@ if ($_SESSION["loggedIn"] == true) {
 		$stmt->bindParam(':gID', $gID);
 		$stmt->bindParam(':username', $username);
 		$stmt->execute();
-		if ($stmt->rowCount() < 1){
+		if ($l == '0' && $stmt->rowCount() < 1){
 			$joinbutton = '<input type="submit" name="submit_join" value="Request Membership" class="btn btn-default">';
 		}
 		
