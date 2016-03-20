@@ -14,36 +14,97 @@
 <body> 
 
 <?php
+session_name('project');  
+session_start();
+$uID = $_SESSION["username"];
 // define variables and set to empty values
 $titleErr = $typeErr = $contentErr =  "";
 $title = $type = $content = "";
 $val = "1";
+$grouplist = '<option value="1" select>Everyone</option>'.
+			'<option value="2">Private</option>';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-   if (empty($_POST["title"])) {
-     $titleErr = "Title is required";
-   } else {
-     $title = test_input($_POST["title"]);
-   }
-     
-
-   if (empty($_POST["type"])) {
-     $typeErr = "Type is required";
-   } else {
-     $type = test_input($_POST["type"]);
-   }
-   
-   if (empty($_POST["content"])) {
-     $contentErr = "Content must not be empty";
-   }  
-   else{
-	   $content = test_input($_POST["content"]);
-   }
-     
-   
-
-   
+//connecting to the database
+if (file_exists('cred/cred.php')){
+	include('cred/cred.php');
 }
+//set credentials if they are not set already
+if (!isset($dsn)) {
+	$dsn = 'mysql:host=localhost;dbname=brainstorm;port=8889';
+}
+if (!isset($dbname)) {
+	$dbname = 'root';
+}
+if (!isset($dbpword)) {
+	$dbpword = 'root';
+}
+
+try {
+	$dbh = new PDO($dsn, $dbname, $dbpword);
+	
+	//get the user's groups
+	$stmt = $dbh->prepare("SELECT * FROM in_group JOIN groups ON groups.groupID=in_group.groupID WHERE in_group.username=:uID");
+	$stmt->bindParam(':uID', $uID);
+	$stmt->execute();
+	if ($stmt->rowCount() > 0) {
+		while($row=$stmt->fetch(PDO::FETCH_ASSOC))
+		{
+			//get all groups and their names
+			$groupID = $row["groupID"];
+			$groupname = $row["groupname"];
+			$grouplist .= '<option value="'.$groupID.'">'.$groupname.'</option>';
+					
+		}
+	}
+
+	if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	   if (empty($_POST["title"])) {
+		 $titleErr = "Title is required";
+	   } else {
+		 $title = test_input($_POST["title"]);
+	   }
+	 
+
+	   if (empty($_POST["type"])) {
+		 $typeErr = "Type is required";
+		 $val = "0";
+	   } else {
+		 $type = test_input($_POST["type"]);
+	   }
+   
+	   if (empty($_POST["content"])) {
+		 $contentErr = "Content must not be empty";
+		 $val = "0";
+	   }  
+	   else{
+		   $content = test_input($_POST["content"]);
+	   }
+	   
+	   //get the group ID
+	   $groupID = $_POST["group"];
+	 
+	   if ($val=="1"){
+			//if everything is good, add group to db
+			$stmt = $dbh->prepare("INSERT INTO posts (head, type, content, rating, username, groupID, title)
+								VALUES (1, :type, :content, 0, :username, :groupID, :title)");
+			$stmt->bindParam(':username', $uID);
+			$stmt->bindParam(':groupID', $groupID);
+			$stmt->bindParam(':content', $content);
+			$stmt->bindParam(':title', $title);
+			$stmt->bindParam(':type', $type);
+			$stmt->execute();
+		}
+
+   
+	}
+
+	//close the connection
+	$dbh = null;
+
+} catch (PDOException $e) {
+	print "Error!: " . $e->getMessage() . "<br/>";
+	die();
+} 
 
 function test_input($data) {
    $data = trim($data);
@@ -97,10 +158,7 @@ function test_input($data) {
    
    <br><br>
 		<select name="group">
-		  <option >Followers</option>
-		  <option >??</option>
-		  <option >??</option>
-		  <option >??</option>
+		  <?php echo $grouplist; ?>
 		</select>
    
    
