@@ -32,6 +32,7 @@ require_once('header.php');
 ?>
 <style>
 .error {color: #3366ff;}
+.success {color: #3399ff;}
 </style>
 <!--Validation of entries-->	
 <?php
@@ -41,12 +42,16 @@ $username = $dname = $gender = $email = $pass = "";
 $val = "1";
 $p = "0";
 $u = "0";
+$successMessage = "<h3>User added successfully! Go to your <a href='account.php'>Account Page</a>.</h3>";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
    
    //Username Validation
    if (empty($_POST["username"])) {
      $nameErr = "Username is required";
+     $u = "1";
+   } else if (preg_match("/[^\w-]/", $_POST["username"])) {
+     $nameErr = "Username cannot contain spaces or special characters";
      $u = "1";
    } else {
      $username = test_input($_POST["username"]);
@@ -118,6 +123,7 @@ function test_input($data) {
 <span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if (! $emailErr == "") {echo $emailErr."<br><br>"; $val = "0";}} ?></span>
 <span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if (empty($_POST["dname"])) {echo $dnameErr."<br><br>"; $val = "0";}} ?></span>
 <span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if ($p=="1") {echo $passErr."<br><br>"; $val = "0"; }}?></span>
+<span class="success"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if ($val=="1") {echo $successMessage."<br><br>"; }}?></span>
 	 
       <div id="login">
         <div class="panel panel-default" style="clear: both;">
@@ -229,6 +235,7 @@ function test_input($data) {
 		$stmt->bindParam(':status', $zero);
 		$stmt->bindParam(':admin', $admin);
 		$stmt->execute();
+		
 	}
 	
 	//close the connection
