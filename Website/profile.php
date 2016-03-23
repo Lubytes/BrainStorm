@@ -200,7 +200,28 @@ function test_input($data) {
    return $data;
 }
 
-	
+//************************Upload image**********************
+  
+     if (isset($_POST['submit_files'])) {
+	        if ($_FILES['filename1']['type'] == 'image/png') {
+
+	      $temp1 = explode(".", $_FILES["filename1"]["name"]);
+	      $newname1 = "Lab2_upload" . '.' . end($temp1);
+
+	      move_uploaded_file($_FILES['filename1']['tmp_name'], './uploads/img/'. $newname1);
+	      chmod("./uploads/img/Lab2_upload.png", 0755);
+	      echo '<img src="./uploads/img/Lab2_upload.png" alt="The image">';
+
+
+	      echo "<p>image size:</p>";
+	      print_r($_FILES['filename1']['size']);
+	      echo "<br>";
+	    } 
+	    else {
+	      echo "<p>Your file was not saved or displayed because only PNG files are accepted.</p>";
+	    }
+	}
+
 
 ?>
 <!DOCTYPE html>
@@ -321,7 +342,7 @@ function test_input($data) {
                   <?php if ($username == $uID) { 
                   	echo "</p>".
                   		' <!-- Trigger the modal with a button -->
-					<button type="button" class="btn btn-info" data-toggle="modal" data-target="#imgModal">Upload new image</button>
+						<button type="button" class="btn btn-info" data-toggle="modal" data-target="#imgModal" name="submit_files">Upload new image</button>
 						<br /><br />'.
                   		'<button type="button" class="btn btn-info" data-toggle="modal" data-target="#bioModal">Update bio</button>';  
                   } 
