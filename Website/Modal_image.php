@@ -14,7 +14,8 @@
 			<!--Image Form-->
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
             
-            	
+            <!--Sends User ID-->
+            	<input type="hidden" name="modal" value="image">	
 
 		  
 		  </form>

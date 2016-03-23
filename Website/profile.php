@@ -102,41 +102,62 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$dname = test_input($_POST["dname"]);
 	$bio = test_input($_POST["bio"]);
 	$modal = test_input($_POST["modal"]);
-	try {
-		$dbh = new PDO($dsn, $dbname, $dbpword);
+	
+	//here's where to do the bio stuff
+	if ( $modal=="bio" ) {
+		try {
+			$dbh = new PDO($dsn, $dbname, $dbpword);
 
-
-	   //if bio form and display name change
-	   if ($modal=="bio" && empty($_POST["dname"])) {
-		 //don't change
-	   } else {
-		 //change
-			$stmt = $dbh->prepare("UPDATE users SET displayName=:dname WHERE username=:username");
-			$stmt->bindParam(':username', $username, PDO::PARAM_STR);
-			$stmt->bindParam(':dname', $dname, PDO::PARAM_STR);
-			$stmt->execute();
+		   //if bio form and display name change
+		   if (empty($_POST["dname"])) {
+			 //don't change
+		   } else {
+			 //change
+				$stmt = $dbh->prepare("UPDATE users SET displayName=:dname WHERE username=:username");
+				$stmt->bindParam(':username', $username, PDO::PARAM_STR);
+				$stmt->bindParam(':dname', $dname, PDO::PARAM_STR);
+				$stmt->execute();
 	 
-	   }
-		//Display Name Validation
-	   if ($modal=="bio" && empty($_POST["bio"])) {
-		 //don't change
-	   } else {
-		 //change
-		 $stmt = $dbh->prepare("UPDATE users SET description=:bio WHERE username=:username");
-		$stmt->bindParam(':username', $username, PDO::PARAM_STR);
-		$stmt->bindParam(':bio', $bio, PDO::PARAM_STR);
-		$stmt->execute();
-	   } 
+		   }
+			//Display Name Validation
+		   if (empty($_POST["bio"])) {
+			 //don't change
+		   } else {
+			 //change
+			 $stmt = $dbh->prepare("UPDATE users SET description=:bio WHERE username=:username");
+			$stmt->bindParam(':username', $username, PDO::PARAM_STR);
+			$stmt->bindParam(':bio', $bio, PDO::PARAM_STR);
+			$stmt->execute();
+		   } 
    
    
-		//close the connection
-		$dbh = null;
+			//close the connection
+			$dbh = null;
 
-	} catch (PDOException $e) {
-		print "Error!: " . $e->getMessage() . "<br/>";
-		die();
+		} catch (PDOException $e) {
+			print "Error!: " . $e->getMessage() . "<br/>";
+			die();
+		}
+		header("Location: profile.php?uID=$username");
 	}
-	header("Location: profile.php?uID=$username");
+	
+	//here's where to do the img stuff
+	if ( $modal=="image" ) {
+		try {
+			$dbh = new PDO($dsn, $dbname, $dbpword);
+
+		   //put the form stuff here
+   
+   
+			//close the connection
+			$dbh = null;
+
+		} catch (PDOException $e) {
+			print "Error!: " . $e->getMessage() . "<br/>";
+			die();
+		}
+		header("Location: profile.php?uID=$username");
+	}
 }
 	
 function create_post($post_ID, $head, $type, $date, $content, $title, $image, $rating, $username, $groupID, $groupName){

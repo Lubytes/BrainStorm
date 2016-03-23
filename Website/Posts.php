@@ -116,8 +116,13 @@ function test_input($data) {
    return $data;
 }
 
+
+
+
 //this function recursively prints all the posts
 function post_all_posts($current_post){
+
+
 	//make dbh and postslist global so we can access them
 	global $postsList, $dbh;
 	$headID = $current_post;
@@ -130,6 +135,7 @@ function post_all_posts($current_post){
 			//get all groups and their names
 			$postsList .= create_post($row["post_ID"], $row["head"], $row["type"], $row["date_time"], $row["content"], 
 			$row["title"], $row["image"], $row["rating"], $row["username"]);
+			
 			//now recursively do the rest	
 			post_all_posts($row["post_ID"]);
 		}
@@ -137,7 +143,6 @@ function post_all_posts($current_post){
 		//there's no children
 		return;
 	}
-	
 }
 
 ?>
