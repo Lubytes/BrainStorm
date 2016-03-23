@@ -43,7 +43,7 @@ $modal = "";
 	
 		//get user info
 		$stmt = $dbh->prepare("SELECT * FROM users WHERE username=:uID");
-		$stmt->bindParam(':uID', $uID);
+		$stmt->bindParam(':uID', $uID, PDO::PARAM_STR);
 		$stmt->execute();
 		if ($stmt->rowCount() > 0) {
 			while($row=$stmt->fetch(PDO::FETCH_ASSOC))
@@ -64,7 +64,7 @@ $modal = "";
 		
 	//get the user's groups
 	$stmt = $dbh->prepare("SELECT * FROM in_group JOIN groups ON groups.groupID=in_group.groupID WHERE in_group.username=:uID");
-	$stmt->bindParam(':uID', $uID);
+	$stmt->bindParam(':uID', $uID, PDO::PARAM_STR);
 	$stmt->execute();
 	if ($stmt->rowCount() > 0) {
 		while($row=$stmt->fetch(PDO::FETCH_ASSOC))
@@ -78,7 +78,7 @@ $modal = "";
 	
 	//get the user's posts
 	$stmt = $dbh->prepare("SELECT * FROM posts JOIN groups ON posts.groupID=groups.groupID WHERE username=:uID");
-	$stmt->bindParam(':uID', $uID);
+	$stmt->bindParam(':uID', $uID, PDO::PARAM_STR);
 	$stmt->execute();
 	if ($stmt->rowCount() > 0) {
 		while($row=$stmt->fetch(PDO::FETCH_ASSOC))
@@ -112,8 +112,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	   } else {
 		 //change
 			$stmt = $dbh->prepare("UPDATE users SET displayName=:dname WHERE username=:username");
-			$stmt->bindParam(':username', $username);
-			$stmt->bindParam(':dname', $dname);
+			$stmt->bindParam(':username', $username, PDO::PARAM_STR);
+			$stmt->bindParam(':dname', $dname, PDO::PARAM_STR);
 			$stmt->execute();
 	 
 	   }
@@ -123,8 +123,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	   } else {
 		 //change
 		 $stmt = $dbh->prepare("UPDATE users SET description=:bio WHERE username=:username");
-		$stmt->bindParam(':username', $username);
-		$stmt->bindParam(':bio', $bio);
+		$stmt->bindParam(':username', $username, PDO::PARAM_STR);
+		$stmt->bindParam(':bio', $bio, PDO::PARAM_STR);
 		$stmt->execute();
 	   } 
    

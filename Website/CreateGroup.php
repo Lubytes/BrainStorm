@@ -11,7 +11,7 @@ $groupname = '';
 $nameErr = $descErr = $loginErr = "";
 $g = $d = $l = '0';
 $val = true; //tests for validation
-
+$successMessage = "<h3>User added successfully!</h3>";
 
 if ($_SESSION["loggedIn"] == true) {
 	$l = '0';
@@ -60,8 +60,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			 //check for the groupname in the db
 			 $groupname = test_input($_POST['groupname']);
 			 $stmt = $dbh->prepare('SELECT * from groups WHERE groupname=:groupname AND creator=:username');
-			 $stmt->bindParam(':groupname', $groupname);
-			 $stmt->bindParam(':username', $username);
+			 $stmt->bindParam(':groupname', $groupname, PDO::PARAM_STR);
+			 $stmt->bindParam(':username', $username, PDO::PARAM_STR);
 			 $stmt->execute();
 			 if ($stmt->rowCount() > 0){
 				$nameErr = "Groupname is not unique to you. You cannot creat multiple groups with the same name.";
@@ -85,28 +85,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		//if everything is good, add group to db
 		$stmt = $dbh->prepare("INSERT INTO groups (creator, groupname, description)
 							VALUES (:username, :groupname, :description)");
-		$stmt->bindParam(':username', $username);
-		$stmt->bindParam(':groupname', $groupname);
-		$stmt->bindParam(':description', $description);
+		$stmt->bindParam(':username', $username, PDO::PARAM_STR);
+		$stmt->bindParam(':groupname', $groupname, PDO::PARAM_STR);
+		$stmt->bindParam(':description', $description, PDO::PARAM_STR);
 		$stmt->execute();
 
 		//get the group ID
 		$stmt = $dbh->prepare('SELECT * from groups WHERE groupname=:groupname AND creator=:username');
-		 $stmt->bindParam(':groupname', $groupname);
-		 $stmt->bindParam(':username', $username);
+		 $stmt->bindParam(':groupname', $groupname, PDO::PARAM_STR);
+		 $stmt->bindParam(':username', $username, PDO::PARAM_STR);
 		 $stmt->execute();
 		 if ($stmt->rowCount() > 0){
 			$check = $stmt->fetch(PDO::FETCH_ASSOC);
 			$groupID = $check['groupID'];
 		 }
 		 
-		 echo $groupID;
+		 //echo $groupID;
 
 		//add the creator to the group
 		$stmt2 = $dbh->prepare("INSERT INTO in_group (username, groupID)
 							VALUES (:creator, :groupID)");
-		$stmt2->bindParam(':creator', $username);
-		$stmt2->bindParam(':groupID', $groupID);
+		$stmt2->bindParam(':creator', $username, PDO::PARAM_STR);
+		$stmt2->bindParam(':groupID', $groupID, PDO::PARAM_INT);
 		$stmt2->execute();
 	}
 
@@ -138,7 +138,7 @@ function test_input($data) {
 	<span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if ($g == "1") {echo $nameErr."<br><br>"; $val = false; }}?></span>
 	<span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if ($d=="1") {echo $descErr."<br><br>"; $val = false; }}?></span>
 	<span class="error"> <?php if ($l=="1") {echo $loginErr."<br><br>"; $val = false; }?></span>
-
+	<span class="success"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if ($val=="1") {echo $successMessage."<br><br>"; }}?></span>
 	
       <div id="create">
         <div class="panel panel-default" style="clear: both;">

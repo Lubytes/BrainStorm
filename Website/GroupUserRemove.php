@@ -37,8 +37,8 @@ try {
 	//just delete the rejected user from pending
 		for($i=0; $i<count($list); $i++){
 			$stmt = $dbh->prepare('DELETE FROM in_group WHERE groupID=:gi AND username=:un');
-			$stmt->bindParam(':un', $list[$i]);
-			$stmt->bindParam(':gi', $gID);
+			$stmt->bindParam(':un', $list[$i], PDO::PARAM_STR);
+			$stmt->bindParam(':gi', $gID, PDO::PARAM_INT);
 			$stmt->execute();
 	}
 	

@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	    } else {
 	    	$username = test_input($_POST["username"]);
 			$stmt = $dbh->prepare('SELECT * from users WHERE username=:name');
-			$stmt->bindParam(':name', $username);
+			$stmt->bindParam(':name', $username, PDO::PARAM_STR);
 			$stmt->execute();
 			//$row = $stmt->fetch();
 			if ($stmt->rowCount() > 0){

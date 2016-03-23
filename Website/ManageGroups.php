@@ -66,7 +66,7 @@ if ($_SESSION["loggedIn"] == true) {
 		
 		//get the group names that this user belongs to
 		$stmt = $dbh->prepare('SELECT * FROM groups WHERE creator=:username');
-		$stmt->bindParam(':username', $username);
+		$stmt->bindParam(':username', $username, PDO::PARAM_STR);
 		$stmt->execute();
 		if ($stmt->rowCount() > 0) {
 			while($row=$stmt->fetch(PDO::FETCH_ASSOC))
@@ -102,7 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		
 			//get the right group
 			$stmt = $dbh->prepare('SELECT * FROM groups WHERE groupID=:groupID');
-			$stmt->bindParam(':groupID', $gID);
+			$stmt->bindParam(':groupID', $gID, PDO::PARAM_INT);
 			$stmt->execute();
 			if ($stmt->rowCount() > 0) {
 				while($row=$stmt->fetch(PDO::FETCH_ASSOC))
@@ -114,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			}
 			//get the right members
 			$stmt = $dbh->prepare('SELECT * FROM in_group WHERE groupID=:groupID');
-			$stmt->bindParam(':groupID', $gID);
+			$stmt->bindParam(':groupID', $gID, PDO::PARAM_INT);
 			$stmt->execute();
 			if ($stmt->rowCount() > 0) {
 				$i = 0;
@@ -134,7 +134,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			
 			//get the pending members
 			$stmt = $dbh->prepare('SELECT * FROM pending_group WHERE groupID=:groupID');
-			$stmt->bindParam(':groupID', $gID);
+			$stmt->bindParam(':groupID', $gID, PDO::PARAM_INT);
 			$stmt->execute();
 			if ($stmt->rowCount() > 0) {
 				$i = 0;

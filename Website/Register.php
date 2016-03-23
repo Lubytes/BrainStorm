@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      //check for the username in the db
 	 $username = test_input($_POST["username"]);
 	 $stmt = $dbh->prepare('SELECT * from users WHERE username=:name');
-	 $stmt->bindParam(':name', $username);
+	 $stmt->bindParam(':name', $username, PDO::PARAM_STR);
 	 $stmt->execute();
 	 if ($stmt->rowCount() > 0){
 	 	$nameErr = "Username is not unique";
@@ -225,15 +225,15 @@ function test_input($data) {
 		//insert
 		$stmt = $dbh->prepare("INSERT INTO users (username, password, email, displayName, gender, picture, description, status, admin)
 							VALUES (:username, :password, :email, :displayName, :gender, :picture, :description, :status, :admin)");
-		$stmt->bindParam(':username', $username);
-		$stmt->bindParam(':password', $hash);
-		$stmt->bindParam(':email', $blank);
-		$stmt->bindParam(':displayName', $dname);
-		$stmt->bindParam(':gender', $gender);
-		$stmt->bindParam(':picture', $blank);
-		$stmt->bindParam(':description', $blank);
-		$stmt->bindParam(':status', $zero);
-		$stmt->bindParam(':admin', $admin);
+		$stmt->bindParam(':username', $username, PDO::PARAM_STR);
+		$stmt->bindParam(':password', $hash, PDO::PARAM_STR);
+		$stmt->bindParam(':email', $blank, PDO::PARAM_STR);
+		$stmt->bindParam(':displayName', $dname, PDO::PARAM_STR);
+		$stmt->bindParam(':gender', $gender, PDO::PARAM_STR);
+		$stmt->bindParam(':picture', $blank, PDO::PARAM_STR);
+		$stmt->bindParam(':description', $blank, PDO::PARAM_STR);
+		$stmt->bindParam(':status', $zero, PDO::PARAM_INT);
+		$stmt->bindParam(':admin', $admin, PDO::PARAM_INT);
 		$stmt->execute();
 		
 	}

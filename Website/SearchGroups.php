@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			//search by keyword
 			$stmt = $dbh->prepare("SELECT * FROM groups WHERE groupname LIKE :keyword");
 			$kw = '%'.$keywords.'%';
-			$stmt->bindParam(':keyword', $kw);
+			$stmt->bindParam(':keyword', $kw, PDO::PARAM_STR);
 			$stmt->execute();
 			if ($stmt->rowCount() > 0) {
 				while($row=$stmt->fetch(PDO::FETCH_ASSOC))

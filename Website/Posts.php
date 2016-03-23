@@ -45,7 +45,7 @@ try {
 	
 	//get head post
 	$stmt = $dbh->prepare("SELECT * FROM posts WHERE post_ID=:hID");
-	$stmt->bindParam(':hID', $hID);
+	$stmt->bindParam(':hID', $hID, PDO::PARAM_INT);
 	$stmt->execute();
 	if ($stmt->rowCount() > 0) {
 		while($row=$stmt->fetch(PDO::FETCH_ASSOC))
@@ -122,7 +122,7 @@ function post_all_posts($current_post){
 	global $postsList, $dbh;
 	$headID = $current_post;
 	$stmt = $dbh->prepare("SELECT * FROM posts WHERE head=:hID");
-	$stmt->bindParam(':hID', $headID);
+	$stmt->bindParam(':hID', $headID, PDO::PARAM_INT);
 	$stmt->execute();
 	if ($stmt->rowCount() > 0) {
 		while($row=$stmt->fetch(PDO::FETCH_ASSOC))

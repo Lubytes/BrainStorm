@@ -38,21 +38,21 @@ try {
 		//for each name selected, add to group and remove from pending
 		for($i=0; $i<count($list); $i++){
 			$stmt = $dbh->prepare('INSERT INTO in_group(groupID, username) VALUES(:g, :u)');
-			$stmt->bindParam(':u', $list[$i]);
-			$stmt->bindParam(':g', $gID);
+			$stmt->bindParam(':u', $list[$i], PDO::PARAM_STR);
+			$stmt->bindParam(':g', $gID, PDO::PARAM_INT);
 			$stmt->execute();
 		
 			$stmt = $dbh->prepare('DELETE FROM pending_group WHERE groupID=:gi AND username=:un');
-			$stmt->bindParam(':un', $list[$i]);
-			$stmt->bindParam(':gi', $gID);
+			$stmt->bindParam(':un', $list[$i], PDO::PARAM_STR);
+			$stmt->bindParam(':gi', $gID, PDO::PARAM_INT);
 			$stmt->execute();
 		}
 	} else {
 		//just delete the rejected user from pending
 		for($i=0; $i<count($list); $i++){
 			$stmt = $dbh->prepare('DELETE FROM pending_group WHERE groupID=:gi AND username=:un');
-			$stmt->bindParam(':un', $list[$i]);
-			$stmt->bindParam(':gi', $gID);
+			$stmt->bindParam(':un', $list[$i], PDO::PARAM_STR);
+			$stmt->bindParam(':gi', $gID, PDO::PARAM_INT);
 			$stmt->execute();
 		}
 	}

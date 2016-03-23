@@ -48,7 +48,7 @@ if ($_SESSION["loggedIn"] == true) {
 		
 		//get the group names that this user belongs to
 		$stmt = $dbh->prepare('SELECT * FROM groups WHERE groupID=:gID');
-		$stmt->bindParam(':gID', $gID);
+		$stmt->bindParam(':gID', $gID, PDO::PARAM_INT);
 		$stmt->execute();
 		if ($stmt->rowCount() > 0) {
 			$get=$stmt->fetch(PDO::FETCH_ASSOC);
@@ -60,8 +60,8 @@ if ($_SESSION["loggedIn"] == true) {
 		}
 		
 		$stmt = $dbh->prepare('SELECT * FROM in_group WHERE groupID=:gID AND username=:username');
-		$stmt->bindParam(':gID', $gID);
-		$stmt->bindParam(':username', $username);
+		$stmt->bindParam(':gID', $gID, PDO::PARAM_INT);
+		$stmt->bindParam(':username', $username, PDO::PARAM_STR);
 		$stmt->execute();
 		if ($l == '0' && $stmt->rowCount() < 1){
 			$joinbutton = '<input type="submit" name="submit_join" value="Request Membership" class="btn btn-default">';
@@ -83,8 +83,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		//if user exists, add to group request
 		if ($l=='0'){
 			$stmt = $dbh->prepare('INSERT INTO pending_group(groupID, username) VALUES(:g, :u)');
-			$stmt->bindParam(':u', $username);
-			$stmt->bindParam(':g', $gID);
+			$stmt->bindParam(':u', $username, PDO::PARAM_STR);
+			$stmt->bindParam(':g', $gID, PDO::PARAM_INT);
 			$stmt->execute();
 		}
 		//close the connection

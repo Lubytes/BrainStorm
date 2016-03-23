@@ -87,11 +87,11 @@ try {
 			//if everything is good, add group to db
 			$stmt = $dbh->prepare("INSERT INTO posts (head, type, content, rating, username, groupID, title)
 								VALUES (1, :type, :content, 0, :username, :groupID, :title)");
-			$stmt->bindParam(':username', $uID);
-			$stmt->bindParam(':groupID', $groupID);
-			$stmt->bindParam(':content', $content);
-			$stmt->bindParam(':title', $title);
-			$stmt->bindParam(':type', $type);
+			$stmt->bindParam(':username', $uID, PDO::PARAM_STR);
+			$stmt->bindParam(':groupID', $groupID, PDO::PARAM_INT);
+			$stmt->bindParam(':content', $content, PDO::PARAM_STR);
+			$stmt->bindParam(':title', $title, PDO::PARAM_STR);
+			$stmt->bindParam(':type', $type, PDO::PARAM_STR);
 			$stmt->execute();
 		}
 
