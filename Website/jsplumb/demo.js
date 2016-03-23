@@ -46,7 +46,7 @@ var headID = $('.headPost').attr('id');
     });
 
     // get the list of ".childOf" + headID elements.            
-    var smallWindows = jsPlumb.getSelector(".childOf" + headID);
+    var smallWindows = jsPlumb.getSelector(".smallPost");
     // make them draggable
     instance.draggable(smallWindows);
 
@@ -66,7 +66,7 @@ var headID = $('.headPost').attr('id');
         // configure the .smallPosts as targets.
         instance.makeTarget(smallWindows, {
             dropOptions: { hoverClass: "hover" },
-            anchor:"Top",
+            anchor:"Bottom",
             endpoint:[ "Dot", { radius: 2, cssClass:"large-green" } ]
         });
         
@@ -75,6 +75,7 @@ var headID = $('.headPost').attr('id');
             filter:"a",
             filterExclude:true,
             allowLoopback:false,
+            anchor:"Top",
             endpoint:[ "Dot", { radius: 7, cssClass:"small-blue" } ],
             anchor:sourceAnchors
         });
@@ -124,14 +125,21 @@ var headID = $('.headPost').attr('id');
 	$('.childOf' + headID).each( function(i,e) {
 		/* you can use e.id instead of $(e).attr('id') */
 		cons.push($(e).attr('id'));
+		
 	});
 	
 	var i = 0;
+	var left = 0;
+	var top = 200;
 	for (i=0; i<cons.length; i++){
+		$("#"+cons[i]).css("left", left);
+		$("#"+cons[i]).css("top", top);
+		left = left + 300;
 		instance.connect({ source: headID, target: cons[i], type:"basic", detachable:false });
 	}
 	
 	
+	makeConnection(cons);
 	
 	// var consb = [];
 // 	$('.babyWindow').each( function(i,e) {
@@ -150,3 +158,39 @@ var headID = $('.headPost').attr('id');
     
     //jsPlumb.connect({source:"headPost", target:"targetWindow3"});
 });	
+
+function makeConnection(c){
+	var left = 0;
+	var top = 350;
+	var cons = [];
+	var i, j;
+	for (i=0; i<c.length; i++){
+		$('.childOf' + c[i]).each( function(i,e) {
+			/* you can use e.id instead of $(e).attr('id') */
+			cons.push($(e).attr('id'));
+		});
+		
+		//alert("cons is: " + cons);
+		//break out of the function if it's empty
+		if ( cons.length < 1 ) {
+			return;
+		}
+		for (j=0; j<cons.length; j++){
+			//set the positions
+			
+			$("#"+cons[j]).css("left", left);
+			$("#"+cons[j]).css("top", top);
+			left = left + 250;
+			instance.connect({ source: c[i], target: cons[j], type:"basic", detachable:false });
+		}
+		top = top + 150;
+		makeConnection(cons);
+	}
+}
+	
+//for each element in cons
+//pass into function makeConnection()
+//get all .childOf+cons[i] -> temp array
+//for each in temp, create connection
+//pass each into makeConnection()
+//	

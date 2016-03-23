@@ -56,40 +56,7 @@
     left: 44em;
 }
 
-#4 {
-    top: 23em;
-    left: 2em;
-}
 
-#3 {
-    top: 31em;
-    left: 26em;
-}
-
-#5 {
-    top: 39em;
-    left: 13em;
-}
-
-#6 {
-    top: 21em;
-    left: 56em;
-}
-
-#7 {
-    top: 29em;
-    left: 50em;
-}
-
-#8 {
-    top: 31em;
-    left: 76em;
-}
-
-#9 {
-    top: 11em;
-    left: 6em;
-}
 
 /** JSPLUMB ARTEFACTS **/
 .jsplumb-endpoint {
