@@ -290,8 +290,15 @@ function test_input($data) {
           </p>
           <div class="jumbotron">
             <div style="background-image: url(assets/img/iceland.jpg);"></div>
-              <a href="profile.php"><img src=""></a>
-
+				<!--This will be the follow/unfollow button -->
+				<?php if ($username != $uID) { 
+                  	echo '<button type="button" class="btn btn-info btn-warning">Follow</button>'.'<hr>';
+                  } 
+                  ?>
+				
+				
+				<a href="profile.php"><img src=""></a>
+			
                 <h3>
                   <?php echo '<img src="'.$displayImg.'" class="profile_img" />'; ?> <?php echo $displayName; ?>
                 </h3>
@@ -315,9 +322,10 @@ function test_input($data) {
 
                   
           </div>
-
+	
           <div class="row">
             <h2>Posts</h2>
+			
               <?php echo $postsList; ?>
           </div><!--/row-->
         </div><!--/.col-xs-12.col-sm-9-->
