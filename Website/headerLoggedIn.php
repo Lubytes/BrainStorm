@@ -1,38 +1,9 @@
-<?php session_start();?>
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
-
-    <title>BrainStorm</title>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-
-    
-    <style>
-      .container {
-        max-width: 940px;
-      }
-      textarea {
-        resize: vertical;
-      }
-    </style>
-
-
-  </head>
-
-  <body>
-
-    <nav class="navbar navbar-default">
+<!-- Nav -->
+    <nav class="navbar navbar-default app-navbar">
     <div class="container" style="max-width: 940px;">
       <div class="navbar-header">
-		<?php if (isset($_SESSION["username"])) { echo '<a class="navbar-brand" href="account.php">BrainStorm Inc.</a>'; }
+		
+        <?php if (isset($_SESSION["username"])) { echo '<a class="navbar-brand" href="account.php">BrainStorm Inc.</a>'; }
 			else {echo '<a class="navbar-brand" href="Login.php">BrainStorm Inc.</a>';}?>
       </div>
 
@@ -48,11 +19,8 @@
 
         <ul class="nav navbar-nav navbar-left">
           <li><a href="account.php">Home</a></li>
-          
-          
           <?php if (!isset($_SESSION["username"])) { echo '<li><a href="Login.php">Login</a></li>'; } ?>
-          
-          <?php if (isset($_SESSION["username"])) { echo '<li><a href="profile.php?uID='.$_SESSION["username"].'" data-action=" ">User Profile
+          <?php if (isset($_SESSION["username"]) && !empty($_SESSION["username"])) { echo '<li><a href="profile.php?uID='.$_SESSION["username"].'" data-action=" ">User Profile
             <span class="glyphicon glyphicon-user" ></span></a></li>'; } ?>
           
           
@@ -70,11 +38,6 @@
 			<li><a href="Logout.php">Logout
             <span class="glyphicon glyphicon-off"></span></a></li>
         </ul>
-
  
     </div>
     </nav>
-
-    <div class="container">
-
-   
