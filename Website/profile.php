@@ -248,6 +248,9 @@ function test_input($data) {
 
     
     <style>
+	
+	.error {color: #3366ff;}
+	
       .container {
         /*max-width: 940px;*/
         width:100%;
@@ -425,6 +428,7 @@ try {
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	   if (empty($_POST["title"])) {
 		 $titleErr = "Title is required";
+		 $val = "0";
 	   } else {
 		 $title = test_input($_POST["title"]);
 	   }
@@ -459,6 +463,12 @@ try {
 			$stmt->bindParam(':type', $type, PDO::PARAM_STR);
 			$stmt->execute();
 		}
+		else{
+			//reopen the post page
+			echo '<script> $(document).ready(function(){
+				$("#myModal").modal();
+				}); </script>';
+		}
 
    
 	}
@@ -486,25 +496,27 @@ try {
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4><span class="glyphicon glyphicon-random"></span>&nbsp Create Post</h4>
         </div>
+		
         <div class="modal-body" style="padding:40px 50px;">
           <!-- <form role="form"> -->
 		  <form role="form" method="post">
 		  
 		  
 			<div style="" class="form-group">
-				<label for="title"><span class="glyphicon glyphicon-tags"></span> Title</label>
+				<label for="title"><span class="glyphicon glyphicon-tags"></span> Title <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if (empty($_POST["title"])) {echo "<span class='error'>".$titleErr."</span>"; $val = "0"; }}?></label>
 				<br>
 			    <input class="form-control" type="text" name="title" id="title" placeholder="The title of your post" value="<?php if(isset($title)) echo "$title";?>">
 		    </div>
 			   
 			<div style="" class="form-group">
-				<label for="content"><span class="glyphicon glyphicon-pencil"></span> Content</label>
+				<label for="content"><span class="glyphicon glyphicon-pencil"></span> Content <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if (empty($_POST["content"])) {echo "<span class='error'>".$contentErr."</span>"; $val = "0"; }}?></label>
 				<br>
 				<textarea class="form-control" name="content" id="content" rows="3" cols="40" placeholder="Post Content"><?php if(isset($content)) echo "$content";?></textarea>
 			</div>
 			   
 			   
 			   <div id="type" style="">
+			   <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if (empty($_POST["type"])) {echo "<span class='error'> <strong>".$typeErr."</strong> </span>"."<br>"; $val = "0";}} ?>
 			   <input type="radio" name="type" 
 			   <?php if(isset($type) && $type=="opinion") echo "checked";?>
 			   value="opinion">Opinion
