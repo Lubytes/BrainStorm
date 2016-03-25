@@ -34,7 +34,6 @@
 			</li>
 			<!--<li><a data-toggle="modal" href="#msgModal">Notifications
             <span class="glyphicon glyphicon-envelope" ></span></a></li>-->
-            <li><a href="makePost.php">Post</a></li>
 			<li><a href="Logout.php">Logout
             <span class="glyphicon glyphicon-off"></span></a></li>
         </ul>
