@@ -101,6 +101,7 @@ $modal = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$dname = test_input($_POST["dname"]);
 	$bio = test_input($_POST["bio"]);
+	$image = test_input($_POST["image"]);
 	$modal = test_input($_POST["modal"]);
 	
 	//here's where to do the bio stuff
@@ -123,6 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		   if (empty($_POST["bio"])) {
 			 //don't change
 		   } else {
+
 			 //change
 			 $stmt = $dbh->prepare("UPDATE users SET description=:bio WHERE username=:username");
 			$stmt->bindParam(':username', $username, PDO::PARAM_STR);
@@ -147,6 +149,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			$dbh = new PDO($dsn, $dbname, $dbpword);
 
 		   //put the form stuff here
+
+		   if (empty($_POST["image"])) {
+			 //don't change
+		   } else {
+
+		   		//$image = "./img/profile/image.png";
+		   		//chmod("./img/profile/image.png", 0777);
+
+			 //change
+			 $stmt = $dbh->prepare("UPDATE users SET picture=:image WHERE username=:username");
+			$stmt->bindParam(':username', $username, PDO::PARAM_STR);
+			$stmt->bindParam(':image', $image, PDO::PARAM_STR);
+			$stmt->execute();
+		   } 
    
    
 			//close the connection
@@ -200,27 +216,6 @@ function test_input($data) {
    return $data;
 }
 
-//************************Upload image**********************
-  
-     if (isset($_POST['submit_files'])) {
-	        if ($_FILES['filename1']['type'] == 'image/png') {
-
-	      $temp1 = explode(".", $_FILES["filename1"]["name"]);
-	      $newname1 = "Lab2_upload" . '.' . end($temp1);
-
-	      move_uploaded_file($_FILES['filename1']['tmp_name'], './uploads/img/'. $newname1);
-	      chmod("./uploads/img/Lab2_upload.png", 0755);
-	      echo '<img src="./uploads/img/Lab2_upload.png" alt="The image">';
-
-
-	      echo "<p>image size:</p>";
-	      print_r($_FILES['filename1']['size']);
-	      echo "<br>";
-	    } 
-	    else {
-	      echo "<p>Your file was not saved or displayed because only PNG files are accepted.</p>";
-	    }
-	}
 
 
 ?>

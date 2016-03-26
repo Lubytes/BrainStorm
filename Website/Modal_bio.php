@@ -1,4 +1,3 @@
-
 	
 	<!-- Update Image Modal -->
 	<div id="bioModal" class="modal fade" role="dialog">
