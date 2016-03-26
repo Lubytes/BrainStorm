@@ -99,13 +99,16 @@ $modal = "";
 	
 	
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$dname = test_input($_POST["dname"]);
-	$bio = test_input($_POST["bio"]);
-	$image = test_input($_POST["image"]);
+	
+	
 	$modal = test_input($_POST["modal"]);
 	
 	//here's where to do the bio stuff
 	if ( $modal=="bio" ) {
+	
+		$dname = test_input($_POST["dname"]);
+		$bio = test_input($_POST["bio"]);
+	
 		try {
 			$dbh = new PDO($dsn, $dbname, $dbpword);
 
@@ -140,28 +143,72 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			print "Error!: " . $e->getMessage() . "<br/>";
 			die();
 		}
-		header("Location: profile.php?uID=$username");
+		header("Location: profile.php?uID=".$username);
 	}
 	
 	//here's where to do the img stuff
 	if ( $modal=="image" ) {
 		try {
+			$valid_image = true;
 			$dbh = new PDO($dsn, $dbname, $dbpword);
 
 		   //put the form stuff here
 
-		   if (empty($_POST["image"])) {
-			 //don't change
-		   } else {
+			if ($_FILES['image']['type'] == 'image/png' ) {
 
-		   		//$image = "./img/profile/image.png";
-		   		//chmod("./img/profile/image.png", 0777);
+			  $temp1 = explode(".", $_FILES["image"]["name"]);
+			  $newname1 = $username. '-profile' . '.' . end($temp1);
 
-			 //change
+			  move_uploaded_file($_FILES['image']['tmp_name'], './img/profile/'. $newname1);
+			  chmod("./img/profile/".$newname1, 0777);
+
+
+			} 
+			else if ($_FILES['image']['type'] == 'image/gif') {
+
+			  $temp1 = explode(".", $_FILES["image"]["name"]);
+			  $newname1 = $username. '-profile' . '.' . end($temp1);
+
+			  move_uploaded_file($_FILES['image']['tmp_name'], './img/profile/'. $newname1);
+			  chmod("./img/profile/".$newname1, 0777);
+
+
+			} 
+			else if ( $_FILES['image']['type'] == 'image/jpeg' ) {
+
+			  $temp1 = explode(".", $_FILES["image"]["name"]);
+			  $newname1 = $username. '-profile' . '.' . end($temp1);
+
+			  move_uploaded_file($_FILES['image']['tmp_name'], './img/profile/'. $newname1);
+			  chmod("./img/profile/".$newname1, 0777);
+
+
+			} 
+			else if ( $_FILES['image']['type'] == 'image/jpg') {
+
+			  $temp1 = explode(".", $_FILES["image"]["name"]);
+			  $newname1 = $username. '-profile' . '.' . end($temp1);
+
+			  move_uploaded_file($_FILES['image']['tmp_name'], './img/profile/'. $newname1);
+			  chmod("./img/profile/".$newname1, 0777);
+
+			} 
+			else {
+			  echo "<p>Only PNG, GIF, JPEG, JPG files are accepted.</p>";
+			  $valid_image = false;
+			}
+
+		   if ($valid_image) {
+			
+			 //update database
+			 $image = "./img/profile/".$newname1;
 			 $stmt = $dbh->prepare("UPDATE users SET picture=:image WHERE username=:username");
-			$stmt->bindParam(':username', $username, PDO::PARAM_STR);
-			$stmt->bindParam(':image', $image, PDO::PARAM_STR);
-			$stmt->execute();
+			 $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+			 $stmt->bindParam(':image', $image, PDO::PARAM_STR);
+			 
+			 
+			 $stmt->execute();
+			
 		   } 
    
    
@@ -172,7 +219,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			print "Error!: " . $e->getMessage() . "<br/>";
 			die();
 		}
-		header("Location: profile.php?uID=$username");
+		header("Location: profile.php?uID=".$username);
 	}
 }
 	
@@ -190,7 +237,7 @@ function create_post($post_ID, $head, $type, $date, $content, $title, $image, $r
 		if ($groupID==1){
 			$groupN = "Public";
 		} else {
-			$groupN = $groupname;
+			$groupN = $groupName;
 		}
 		//make the string
 		return '<div class="panel panel-info panel-post">
@@ -420,7 +467,7 @@ try {
 		}
 	}
 
-	if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	if ($_SERVER["REQUEST_METHOD"] == "POST" && test_input($_POST["modal"]) == "make_post") {
 	   if (empty($_POST["title"])) {
 		 $titleErr = "Title is required";
 		 $val = "0";
@@ -477,8 +524,7 @@ try {
 } 
 
 ?>
-	  
-	  
+	    
 	  
 	  
   <!-- Modal -->
@@ -496,7 +542,7 @@ try {
           <!-- <form role="form"> -->
 		  <form role="form" method="post">
 		  
-		  
+		  <input type="hidden" name="modal" value="make_post">
 			<div style="" class="form-group">
 				<label for="title"><span class="glyphicon glyphicon-tags"></span> Title <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if (empty($_POST["title"])) {echo "<span class='error'>".$titleErr."</span>"; $val = "0"; }}?></label>
 				<br>
