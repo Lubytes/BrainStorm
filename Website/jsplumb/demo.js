@@ -8,18 +8,10 @@ jsPlumb.ready(function () {
 //get the id of the head post
 var headID = $('.headPost').attr('id');
 
-    // list of possible anchor locations for the blue source element
-    var sourceAnchors = [
-        [ 0, 1, 0, 1 ],
-        [ 0.25, 1, 0, 1 ],
-        [ 0.5, 1, 0, 1 ],
-        [ 0.75, 1, 0, 1 ],
-        [ 1, 1, 0, 1 ]
-    ];
 
     var instance = window.instance = jsPlumb.getInstance({
         // drag options
-        DragOptions: { cursor: "pointer", zIndex: 2000 },
+        DragOptions: { cursor: "pointer", zIndex: 2000,  },
         // default to a gradient stroke from blue to green.
         PaintStyle: {
             gradient: { stops: [
@@ -57,8 +49,9 @@ var headID = $('.headPost').attr('id');
         // that started on the 'enable/disable' link on the blue window.
         instance.makeSource(headID, {
             filter:"a",
-            filterExclude:true,
+            filterExclude: true,
             maxConnections: -1,
+            allowLoopback: false,
             endpoint:[ "Dot", { radius: 3, cssClass:"small-blue" } ],
             anchor:sourceAnchors
         });
@@ -66,37 +59,23 @@ var headID = $('.headPost').attr('id');
         // configure the .smallPosts as targets.
         instance.makeTarget(smallWindows, {
             dropOptions: { hoverClass: "hover" },
-            anchor:"Bottom",
             endpoint:[ "Dot", { radius: 3, cssClass:"large-green" } ]
         });
         
         
         instance.makeSource(smallWindows, {
             filter:"a",
-            filterExclude:true,
-            allowLoopback:false,
-            anchor:"Top",
+            filterExclude: true,
+            allowLoopback: false,
+            maxConnections: -1,
             endpoint:[ "Dot", { radius: 3, cssClass:"small-blue" } ],
             anchor:sourceAnchors
         });
         
-        // configure the .babyWindows as targets.
-        // instance.makeTarget(babyWindows, {
-//             dropOptions: { hoverClass: "hover" },
-//             anchor:"Top",
-//             endpoint:[ "Dot", { radius: 2, cssClass:"large-green" } ]
-//         });
-
-        // and finally connect a couple of small windows, just so its obvious what's going on when this demo loads.           
-        //instance.connect({ source: "headPost", target: "targetWindow5" });
-        //instance.connect({ source: "headPost", target: "targetWindow2" });
-        // $( ".smallPosts" ).each(function( index ) {
-//         	instance.connect({ source: "headPost", target: ($( this ).attr('id')) });
-// 		});
         
     });
 
-    jsPlumb.fire("jsPlumbDemoLoaded", instance);
+    //jsPlumb.fire("jsPlumbDemoLoaded", instance);
     
     
     
@@ -109,19 +88,9 @@ var headID = $('.headPost').attr('id');
 	  }
 	});
 	
-	
-	
-	//var cons = ["targetWindow1", "targetWindow2", "targetWindow3", "targetWindow4", "targetWindow5"];
-	//var cons = $( ".childOf" + headID ).attr("id").toArray();
+
 	var cons = [];
 
-
-	///////////////////////////////////////////////////////////////////////////////////////////////////
-	// Need to write a recursive function here to get posts to display correctly
-	//
-	///////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	
 	$('.childOf' + headID).each( function(i,e) {
 		/* you can use e.id instead of $(e).attr('id') */
 		cons.push($(e).attr('id'));
@@ -135,29 +104,13 @@ var headID = $('.headPost').attr('id');
 		$("#"+cons[i]).css("left", left);
 		$("#"+cons[i]).css("top", top);
 		left = left + 300;
-		instance.connect({ source: headID, target: cons[i], type:"basic", detachable:false });
-		alert("connecting: " + cons[i] + " to " + headID);
+		instance.connect({ source: headID, target: cons[i], anchors:[ "Bottom", "Top" ], type:"basic", detachable:false });
+		//alert("connecting: " + cons[i] + " to " + headID);
 	}
 	
-	
+	//recursively makes connections
 	makeConnection(cons);
 	
-	// var consb = [];
-// 	$('.babyWindow').each( function(i,e) {
-// 		/* you can use e.id instead of $(e).attr('id') */
-// 		consb.push($(e).attr('id'));
-// 	});
-// 	
-// 	var i = 0;
-// 	for (i=0; i<3; i++){
-// 		instance.connect({ source: headID, target: consb[i], type:"basic", detachable:false });
-// 	}
-
-	//var c = jsPlumb.connect({ source:"headPost", target:"targetWindow3", type:"basic" });
-    
-    
-    
-    //jsPlumb.connect({source:"headPost", target:"targetWindow3"});
 });	
 
 function makeConnection(c){
@@ -182,8 +135,8 @@ function makeConnection(c){
 			$("#"+cons[j]).css("left", left);
 			$("#"+cons[j]).css("top", top);
 			left = left + 250;
-			instance.connect({ source: c[i], target: cons[j], type:"basic", detachable:false });
-			alert("connecting: " + cons[j] + "to" + c[i]);
+			instance.connect({ source: c[i], target: cons[j], anchors:[ "Bottom", "Top" ], type:"basic", detachable:false });
+			//alert("connecting: " + cons[j] + "to" + c[i]);
 		}
 		top = top + 150;
 		makeConnection(cons);

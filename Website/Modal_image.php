@@ -36,53 +36,54 @@
 <?php 
   
  //************************Upload image**********************
-     if (isset($_POST['submit_image'])) {
+     // if (isset($_POST['submit_image'])) {
+// 
+// 	      if ($_FILES['image']['type'] == 'image/png' ) {
+// 
+// 	      $temp1 = explode(".", $_FILES["image"]["name"]);
+// 	      $newname1 = "image" . '.' . end($temp1);
+// 
+// 	      move_uploaded_file($_FILES['image']['tmp_name'], './img/profile/'. $newname1);
+// 	      chmod("./img/profile/image.png", 0777);
+// 
+// 
+// 	    } 
+// 	    else if ($_FILES['image']['type'] == 'image/gif') {
+// 
+// 	      $temp1 = explode(".", $_FILES["image"]["name"]);
+// 	      $newname1 = "image" . '.' . end($temp1);
+// 
+// 	      move_uploaded_file($_FILES['image']['tmp_name'], './img/profile/'. $newname1);
+// 	      chmod("./img/profile/image.gif", 0777);
+// 
+// 
+// 	    } 
+// 	    else if ( $_FILES['image']['type'] == 'image/jpeg' ) {
+// 
+// 	      $temp1 = explode(".", $_FILES["image"]["name"]);
+// 	      $newname1 = "image" . '.' . end($temp1);
+// 
+// 	      move_uploaded_file($_FILES['image']['tmp_name'], './img/profile/'. $newname1);
+// 	      chmod("./img/profile/image.jpeg", 0777);
+// 
+// 
+// 	    } 
+// 	    else if ( $_FILES['image']['type'] == 'image/jpg') {
+// 
+// 	      $temp1 = explode(".", $_FILES["image"]["name"]);
+// 	      $newname1 = "image" . '.' . end($temp1);
+// 
+// 	      move_uploaded_file($_FILES['image']['tmp_name'], './img/profile/'. $newname1);
+// 	      chmod("./img/profile/image.jpg", 0777);
+// 
+// 	    } 
+// 	    else {
+// 	      echo "<p>Only PNG, GIF, JPEG, JPG files are accepted.</p>";
+// 	    }
+// 
+// 
+// 	}
 
-	      if ($_FILES['image']['type'] == 'image/png' ) {
-
-	      $temp1 = explode(".", $_FILES["image"]["name"]);
-	      $newname1 = "image" . '.' . end($temp1);
-
-	      move_uploaded_file($_FILES['image']['tmp_name'], './img/profile/'. $newname1);
-	      chmod("./img/profile/image.png", 0777);
-
-
-	    } 
-	    else if ($_FILES['image']['type'] == 'image/gif') {
-
-	      $temp1 = explode(".", $_FILES["image"]["name"]);
-	      $newname1 = "image" . '.' . end($temp1);
-
-	      move_uploaded_file($_FILES['image']['tmp_name'], './img/profile/'. $newname1);
-	      chmod("./img/profile/image.gif", 0777);
-
-
-	    } 
-	    else if ( $_FILES['image']['type'] == 'image/jpeg' ) {
-
-	      $temp1 = explode(".", $_FILES["image"]["name"]);
-	      $newname1 = "image" . '.' . end($temp1);
-
-	      move_uploaded_file($_FILES['image']['tmp_name'], './img/profile/'. $newname1);
-	      chmod("./img/profile/image.jpeg", 0777);
-
-
-	    } 
-	    else if ( $_FILES['image']['type'] == 'image/jpg') {
-
-	      $temp1 = explode(".", $_FILES["image"]["name"]);
-	      $newname1 = "image" . '.' . end($temp1);
-
-	      move_uploaded_file($_FILES['image']['tmp_name'], './img/profile/'. $newname1);
-	      chmod("./img/profile/image.jpg", 0777);
-
-	    } 
-	    else {
-	      echo "<p>Only PNG, GIF, JPEG, JPG files are accepted.</p>";
-	    }
-
-
-	}
 
 ?>
  -->
