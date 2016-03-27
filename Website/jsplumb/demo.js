@@ -27,7 +27,7 @@ var headID = $('.headPost').attr('id');
                 [ 1, "#558822" ]
             ] },
             strokeStyle: "#558822",
-            lineWidth: 10
+            lineWidth: 3
         },
         Container: "canvas"
     });
@@ -59,7 +59,7 @@ var headID = $('.headPost').attr('id');
             filter:"a",
             filterExclude:true,
             maxConnections: -1,
-            endpoint:[ "Dot", { radius: 7, cssClass:"small-blue" } ],
+            endpoint:[ "Dot", { radius: 3, cssClass:"small-blue" } ],
             anchor:sourceAnchors
         });
 
@@ -67,7 +67,7 @@ var headID = $('.headPost').attr('id');
         instance.makeTarget(smallWindows, {
             dropOptions: { hoverClass: "hover" },
             anchor:"Bottom",
-            endpoint:[ "Dot", { radius: 2, cssClass:"large-green" } ]
+            endpoint:[ "Dot", { radius: 3, cssClass:"large-green" } ]
         });
         
         
@@ -76,7 +76,7 @@ var headID = $('.headPost').attr('id');
             filterExclude:true,
             allowLoopback:false,
             anchor:"Top",
-            endpoint:[ "Dot", { radius: 7, cssClass:"small-blue" } ],
+            endpoint:[ "Dot", { radius: 3, cssClass:"small-blue" } ],
             anchor:sourceAnchors
         });
         
@@ -136,6 +136,7 @@ var headID = $('.headPost').attr('id');
 		$("#"+cons[i]).css("top", top);
 		left = left + 300;
 		instance.connect({ source: headID, target: cons[i], type:"basic", detachable:false });
+		alert("connecting: " + cons[i] + " to " + headID);
 	}
 	
 	
@@ -165,11 +166,11 @@ function makeConnection(c){
 	var cons = [];
 	var i, j;
 	for (i=0; i<c.length; i++){
+		cons = []; //empty the array
 		$('.childOf' + c[i]).each( function(i,e) {
 			/* you can use e.id instead of $(e).attr('id') */
 			cons.push($(e).attr('id'));
 		});
-		
 		//alert("cons is: " + cons);
 		//break out of the function if it's empty
 		if ( cons.length < 1 ) {
@@ -182,6 +183,7 @@ function makeConnection(c){
 			$("#"+cons[j]).css("top", top);
 			left = left + 250;
 			instance.connect({ source: c[i], target: cons[j], type:"basic", detachable:false });
+			alert("connecting: " + cons[j] + "to" + c[i]);
 		}
 		top = top + 150;
 		makeConnection(cons);
