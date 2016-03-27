@@ -1,5 +1,45 @@
 <?php
-// Array with names
+
+//connnect to database
+if (file_exists('cred/cred.php')){
+		include('cred/cred.php');
+	}
+	else{echo "no cred";}
+	//set credentials if they are not set already
+	if (!isset($dsn)) {
+		$dsn = 'mysql:host=localhost;dbname=brainstorm;port=8889';
+	}
+	else{echo "no dsn";}
+	if (!isset($dbname)) {
+		$dbname = 'root';
+	}
+	else{echo "no root";}
+	if (!isset($dbpword)) {
+		$dbpword = 'root';
+	}
+	else{echo "no dbpword";}
+
+try {
+		$dbh = new PDO($dsn, $dbname, $dbpword);
+		$query = "SELECT username FROM users";
+		$result = $dbh->query($query);
+		//$row = $result->fetch_array(MYSQLI_NUM);
+		while($uids = $result->fetch_array(MYSQLI_NUM)){
+					array_push($a,$uids[0]);
+				}
+		
+} catch (PDOException $e) {
+		echo "Error!: " . $e->getMessage() . "<br/>";
+		die();
+	} 
+//get usernames from database and push them into the array
+/*$link = mysqli_connect($db_host, $db_user, $db_pass, $db_name) or die ('Your DB connection is misconfigured. Enter the correct values and try again.');
+				$lstmt = mysqli_query($link, "SELECT username FROM users");
+				while($empids = mysqli_fetch_array($lstmt,MYSQLI_NUM)){
+					array_push($a,$empids[0]);
+				}
+*/
+/*
 $a[] = "Anna";
 $a[] = "Brittany";
 $a[] = "Cinderella";
@@ -30,7 +70,9 @@ $a[] = "Elizabeth";
 $a[] = "Ellen";
 $a[] = "Wenche";
 $a[] = "Vicky";
+*/
 
+$a[] = "stillWorks";
 // get the q parameter from URL
 $q = $_GET["q"];
 

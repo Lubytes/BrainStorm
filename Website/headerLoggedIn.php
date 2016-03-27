@@ -33,14 +33,12 @@ function showResults(str) {
 
       <form class="navbar navbar-left navbar-form " role="search">
         <div class="input-group">
-		<form> 
-		<input type="text" size="30" onkeyup="showResults(this.value)">
+		<input type="text" size="30" onkeyup="showResults(this.value)"></input>
 		<div id="livesearch"></div>
-		 <span class="input-group-btn">
-              <button class="btn btn-default" type="button" aria-label="...">
+			<span class="input-group-btn">
+              <button type="submit" class="btn btn-default">
                 <span class="glyphicon glyphicon-search" ></span></button> 
             </span>
-		</form>
            <!-- <input type="text" class="form-control" placeholder="Search for..."> -->
            
         </div>
