@@ -1,4 +1,28 @@
 <!-- Nav -->
+<script>
+function showResults(str) {
+    if (str.length == 0) { 
+        document.getElementById("livesearch").innerHTML = "";
+		document.getElementById("livesearch").style.border="0px";
+        return;
+    }
+	else{
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                document.getElementById("livesearch").innerHTML = xmlhttp.responseText;
+				document.getElementById("livesearch").style.border="1px solid #A5ACB2";
+            }
+        };
+        xmlhttp.open("GET", "livesearch.php?q=" + str, true);
+        xmlhttp.send();
+    }
+}
+</script>
+
+
+
+
     <nav class="navbar navbar-default app-navbar">
     <div class="container" style="max-width: 940px;">
       <div class="navbar-header">
@@ -9,11 +33,16 @@
 
       <form class="navbar navbar-left navbar-form " role="search">
         <div class="input-group">
-           <input type="text" class="form-control" placeholder="Search for...">
-            <span class="input-group-btn">
+		<form> 
+		<input type="text" size="30" onkeyup="showResults(this.value)">
+		<div id="livesearch"></div>
+		 <span class="input-group-btn">
               <button class="btn btn-default" type="button" aria-label="...">
                 <span class="glyphicon glyphicon-search" ></span></button> 
             </span>
+		</form>
+           <!-- <input type="text" class="form-control" placeholder="Search for..."> -->
+           
         </div>
       </form>
 
