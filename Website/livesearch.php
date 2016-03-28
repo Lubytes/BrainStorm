@@ -1,31 +1,31 @@
 <?php
 
 //connnect to database
+
 if (file_exists('cred/cred.php')){
 		include('cred/cred.php');
 	}
-	else{echo "no cred";}
 	//set credentials if they are not set already
 	if (!isset($dsn)) {
 		$dsn = 'mysql:host=localhost;dbname=brainstorm;port=8889';
 	}
-	else{echo "no dsn";}
 	if (!isset($dbname)) {
 		$dbname = 'root';
 	}
-	else{echo "no root";}
 	if (!isset($dbpword)) {
 		$dbpword = 'root';
 	}
-	else{echo "no dbpword";}
 
 try {
+		$a = array();
 		$dbh = new PDO($dsn, $dbname, $dbpword);
-		$query = "SELECT username FROM users";
-		$result = $dbh->query($query);
+		$query = $dbh->prepare("SELECT * from users");
+		//$query->bindParam(':uID', $uID);
+		$query->execute();
 		//$row = $result->fetch_array(MYSQLI_NUM);
-		while($uids = $result->fetch_array(MYSQLI_NUM)){
-					array_push($a,$uids[0]);
+		while($uids = $query->fetch(PDO::FETCH_ASSOC)){
+					array_push($a,$uids["username"]);
+					//array_push($a,$uids[0]);
 				}
 		
 } catch (PDOException $e) {
