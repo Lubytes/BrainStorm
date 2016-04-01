@@ -1,3 +1,7 @@
+var posttop = 400;
+var topPad = 250;
+var leftPad = 320;
+
 jsPlumb.ready(function () {
 
 //this code is taken from the jsPlumb open source library, specifically the source and targets demo
@@ -7,7 +11,6 @@ jsPlumb.ready(function () {
 
 //get the id of the head post
 var headID = $('.headPost').attr('id');
-
 
     var instance = window.instance = jsPlumb.getInstance({
         // drag options
@@ -40,7 +43,7 @@ var headID = $('.headPost').attr('id');
     // get the list of ".childOf" + headID elements.            
     var smallWindows = jsPlumb.getSelector(".smallPost");
     // make them draggable
-    instance.draggable(smallWindows);
+    //instance.draggable(smallWindows);
 
     // suspend drawing and initialise.
     instance.batch(function () {
@@ -98,24 +101,24 @@ var headID = $('.headPost').attr('id');
 	});
 	
 	var i = 0;
-	var left = 0;
-	var top = 200;
+	var left = 50;
+	var top = topPad + 100;
 	for (i=0; i<cons.length; i++){
 		$("#"+cons[i]).css("left", left);
 		$("#"+cons[i]).css("top", top);
-		left = left + 300;
+		left = left + leftPad;
 		instance.connect({ source: headID, target: cons[i], anchors:[ "Bottom", "Top" ], type:"basic", detachable:false });
 		//alert("connecting: " + cons[i] + " to " + headID);
 	}
 	
 	//recursively makes connections
+	//topPad += 150;
 	makeConnection(cons);
 	
 });	
 
 function makeConnection(c){
-	var left = 0;
-	var top = 350;
+	var left = 30;
 	var cons = [];
 	var i, j;
 	for (i=0; i<c.length; i++){
@@ -129,23 +132,18 @@ function makeConnection(c){
 		if ( cons.length < 1 ) {
 			return;
 		}
+		posttop = posttop + topPad;
 		for (j=0; j<cons.length; j++){
 			//set the positions
 			
 			$("#"+cons[j]).css("left", left);
-			$("#"+cons[j]).css("top", top);
-			left = left + 250;
+			$("#"+cons[j]).css("top", posttop);
+			left = left + leftPad;
 			instance.connect({ source: c[i], target: cons[j], anchors:[ "Bottom", "Top" ], type:"basic", detachable:false });
 			//alert("connecting: " + cons[j] + "to" + c[i]);
 		}
-		top = top + 150;
+		//posttop = posttop + topPad;
 		makeConnection(cons);
 	}
 }
 	
-//for each element in cons
-//pass into function makeConnection()
-//get all .childOf+cons[i] -> temp array
-//for each in temp, create connection
-//pass each into makeConnection()
-//	

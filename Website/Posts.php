@@ -4,6 +4,7 @@ session_name('project');
 session_start();
 //require_once('header.php');
 
+$uID = $_SESSION['username'];
 $hID = $_GET["head"];
 $username = '';
 $postsList = "";
@@ -11,7 +12,12 @@ $postmembers = array();
 $nameErr = $descErr = $postErr = $loginErr = "";
 $g = $d = $l = '0';
 $val = true; //tests for validation
-
+$post_styles = "<style>"; //post placements
+$left = 0;
+$top = 100;
+$grouplist = '<option value="1" select>Everyone</option>'.
+			'<option value="2">Private</option>';
+$modal_script = "";
 
 
 //change this to privacy setting
@@ -59,28 +65,34 @@ try {
 	
 	post_all_posts($latest_post);
 	
-	//get all posts from this head
-	// $children = true;
-// 	while ($children){
-// 		$headID = $latest_post;
-// 		$stmt = $dbh->prepare("SELECT * FROM posts WHERE head=:hID");
-// 		$stmt->bindParam(':hID', $headID);
-// 		$stmt->execute();
-// 		if ($stmt->rowCount() > 0) {
-// 			while($row=$stmt->fetch(PDO::FETCH_ASSOC))
-// 			{
-// 				//get all groups and their names
-// 				$latest_post = $row["post_ID"];
-// 				$postsList .= create_post($row["post_ID"], $row["head"], $row["type"], $row["date_time"], $row["content"], 
-// 				$row["title"], $row["image"], $row["rating"], $row["username"]);		
-// 			}
-// 			$children = false;
-// 		} else {
-// 			//$latest_post = $hID;
-// 			$children = false;
-// 		}
-// 	}
+	$post_styles.= "</style>";
 	
+	
+	//get the user's groups
+	$stmt = $dbh->prepare("SELECT * FROM in_group JOIN groups ON groups.groupID=in_group.groupID WHERE in_group.username=:uID");
+	$stmt->bindParam(':uID', $uID, PDO::PARAM_STR);
+	$stmt->execute();
+	if ($stmt->rowCount() > 0) {
+		while($row=$stmt->fetch(PDO::FETCH_ASSOC))
+		{
+			//get all groups and their names
+			$groupID = $row["groupID"];
+			$groupname = $row["groupname"];
+			$grouplist .= '<option value="'.$groupID.'">'.$groupname.'</option>';		
+		}
+	}
+	
+	//sets the correct head value based on button clicked
+	$head = $hID;
+	
+	if (isset($_GET["replyTo"])) {
+		//this whole section is gonna open a modal for the full stuff or something I'm not sure yet
+		$replyTo = $_GET["replyTo"];
+		$modal_script =  '<script> $(document).ready(function(){
+				$("#myModal").modal();
+				}); </script>';
+	}
+
 	//close the connection
 	$dbh = null;
 
@@ -98,10 +110,21 @@ function create_post($post_ID, $head, $type, $date, $content, $title, $image, $r
 		} else {
 			$class = "post smallPost childOf".$head;
 		}
+		global $left, $top, $post_styles;
+		
+		//set up styles
+		$post_styles .= "div #".$post_ID. "{
+							left: ".$left."px;
+							top: ".$top."px;
+						}
+						";
+		$left = $left + 250;
+		$top = $top + 200;
 		//make the string
 		return '<div class="'.$class.'" id="'.$post_ID.'">
 				  <h3>'.$title.'</h3>
 				  <p class="post_content">'.$content.'</p>
+				  <button type="submit" name="replyTo" value="'.$post_ID.'" class="btn btn-default">Full View</button>
 				</div>';
 	} else {
 		return null;
@@ -149,6 +172,8 @@ function post_all_posts($current_post){
 <!DOCTYPE html>
 <html lang="en">
   <head>
+  
+  <?php echo $post_styles ?>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -166,11 +191,15 @@ function post_all_posts($current_post){
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
 	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 	<link href="//fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
+	
+	
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 	<link rel="stylesheet" href="css/jsPlumbToolkit-defaults.css">
 	<link rel="stylesheet" href="css/main.css">
 	<link rel="stylesheet" href="css/jsPlumbToolkit-demo.css">
 	<link rel="stylesheet" href="css/demo.css">
+	
 	
 	
 	<style>
@@ -180,11 +209,8 @@ function post_all_posts($current_post){
       textarea {
         resize: vertical;
       }
-    </style>
-
-
-  
-	<style>
+    
+    
 	.error {color: #3366ff;}
 	</style>
 	
@@ -254,23 +280,11 @@ function post_all_posts($current_post){
 			<!-- demo -->
             <div class="jtk-demo-canvas canvas-wide source-target-demo jtk-surface jtk-surface-nopan" id="canvas">
             
+            <form action="Posts.php" method="get" enctype='multipart/form-data'>
+            <input type="hidden" name="head" value="<?php echo $hID; ?>">
             <?php echo $postsList; ?>
+            </form>
             
-            
-               <!--  <div class="window" id="headPost">
-                    <strong>Window 1</strong>
-                    <a href="#" id="enableDisableSource">disable</a>
-                </div>
-                <div class="window smallWindow" id="targetWindow2"><strong>Window 2 <a href="index.html">link</a></strong><br/><br/></div>
-                <div class="window smallWindow" id="targetWindow3"><strong>Window 3</strong><br/><br/></div>
-                <div class="window smallWindow" id="targetWindow4"><strong>Window 4</strong><br/><br/></div>
-                <div class="window smallWindow" id="targetWindow5"><strong>Window 5</strong><br/><br/></div>
-                <div class="window smallWindow" id="targetWindow6"><strong>Window 6</strong><br/><br/></div>
-                
-                <div class="window babyWindow" id="targetWindow7"><strong>Window 4</strong><br/><br/></div>
-                <div class="window babyWindow" id="targetWindow8"><strong>Window 5</strong><br/><br/></div>
-                <div class="window babyWindow" id="targetWindow9"><strong>Window 6</strong><br/><br/></div>
-                -->
             </div>
 			<!-- /demo -->
             
@@ -278,7 +292,7 @@ function post_all_posts($current_post){
 
 
         <!-- JS -->
-        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        
         <!-- support lib for bezier stuff -->
         <script src="jsplumb/lib/jsBezier-0.7.js"></script>
         <!-- event adapter -->
@@ -316,7 +330,15 @@ function post_all_posts($current_post){
 
 		<!--  demo code -->
 		<script src="jsplumb/demo.js"></script>
+		
+		
+ 
 
+	<?php
+	echo $modal_script;
+	include('Modal_full.php');
+	//require_once('footer.php');
+	?>
 
     </body>
 </html>
@@ -325,11 +347,7 @@ function post_all_posts($current_post){
 <!--  end of jsplumb -->
 	
 	
-	
 
 
 
-<?php
 
-//require_once('footer.php');
-?>
