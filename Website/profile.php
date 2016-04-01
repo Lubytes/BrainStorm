@@ -362,7 +362,7 @@ $(document).ready(function(){
             <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
           </p>
           <div class="jumbotron">
-            <div style="background-image: url(assets/img/iceland.jpg);"></div>
+            <div style="display:inline-block;margin:10px;"></div>
 				<!--This will be the follow/unfollow button -->
 				<?php if ($username != $uID) { 
                   	echo '<button type="button" class="btn btn-info btn-warning">Follow</button>'.'<hr>';
@@ -371,10 +371,12 @@ $(document).ready(function(){
 				
 				
 				<a href="profile.php"><img src=""></a>
-			
+				<div>			
                 <h3>
-                  <?php echo '<img src="'.$displayImg.'" class="profile_img" />'; ?> <?php echo $displayName; ?>
+                  <?php echo '<img src="'.$displayImg.'" class="profile_img" style="width:256px;height:256px;"/>'; ?> <?php echo $displayName; ?>
                 </h3>
+            	</div>
+            	<div>
                 	<p>
                   <?php echo "Gender: " . $displayGender; ?>
                   </p>
@@ -390,7 +392,7 @@ $(document).ready(function(){
                   
                   ?>
                   </p>
-                  
+                 </div> 
                  
 
                   

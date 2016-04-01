@@ -7,7 +7,7 @@
 		<div class="modal-content">
 		  <div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal">&times;</button>
-			<h4 class="modal-title">Update your Bio</h4>
+			<h4 class="modal-title"><span class="glyphicon glyphicon-pencil"></span>&nbsp; Update your Bio</h4>
 		  </div>
 		  <div class="modal-body">
 			<!--Bio Form-->

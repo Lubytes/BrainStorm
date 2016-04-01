@@ -47,7 +47,7 @@
       </form>
 
         <ul class="nav navbar-nav navbar-left">
-          <li><a href="account.php">Home</a></li>
+          <li><a href="Profile.php">Home</a></li>
           
           
           <?php if (!isset($_SESSION["username"])) { echo '<li><a href="Login.php">Login</a></li>'; } ?>
