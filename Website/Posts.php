@@ -108,7 +108,7 @@ function create_post($post_ID, $head, $type, $date, $content, $title, $image, $r
 		if ($head==1){
 			$class = "post headPost";
 		} else {
-			$class = "post smallPost childOf".$head;
+			$class = "childOf" .$head . " post smallPost";
 		}
 		global $left, $top, $post_styles;
 		
@@ -274,9 +274,8 @@ function post_all_posts($current_post){
     
     
    
-<!--  start of jsplumb -->     
-
-        <div class="jtk-demo-main">
+<!--  start of jsplumb -->   
+ <div class="jtk-demo-main">
 			<!-- demo -->
             <div class="jtk-demo-canvas canvas-wide source-target-demo jtk-surface jtk-surface-nopan" id="canvas">
             
@@ -287,11 +286,7 @@ function post_all_posts($current_post){
             
             </div>
 			<!-- /demo -->
-            
-
-
-
-        <!-- JS -->
+<!-- JS -->
         
         <!-- support lib for bezier stuff -->
         <script src="jsplumb/lib/jsBezier-0.7.js"></script>
@@ -329,7 +324,15 @@ function post_all_posts($current_post){
         <!-- /JS -->
 
 		<!--  demo code -->
-		<script src="jsplumb/demo.js"></script>
+		<script src="jsplumb/demo.js"></script>  
+
+       
+            
+
+
+
+        
+		
 		
 		
  
@@ -340,6 +343,9 @@ function post_all_posts($current_post){
 	//require_once('footer.php');
 	?>
 
+
+	
+		
     </body>
 </html>
 

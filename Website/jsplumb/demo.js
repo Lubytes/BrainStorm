@@ -7,14 +7,20 @@ jsPlumb.ready(function () {
 //this code is taken from the jsPlumb open source library, specifically the source and targets demo
 //copyright info found in src/jsPlumb.js
 //it's a work in progress
-
+var sourceAnchors = [
+        [ 0, 1, 0, 1 ],
+        [ 0.25, 1, 0, 1 ],
+        [ 0.5, 1, 0, 1 ],
+        [ 0.75, 1, 0, 1 ],
+        [ 1, 1, 0, 1 ]
+    ];
 
 //get the id of the head post
 var headID = $('.headPost').attr('id');
 
     var instance = window.instance = jsPlumb.getInstance({
         // drag options
-        DragOptions: { cursor: "pointer", zIndex: 2000,  },
+        //DragOptions: { cursor: "pointer", zIndex: 2000,  },
         // default to a gradient stroke from blue to green.
         PaintStyle: {
             gradient: { stops: [
@@ -34,11 +40,7 @@ var headID = $('.headPost').attr('id');
         jsPlumbUtil.consume(e);
     });
 
-    // bind to a connection event, just for the purposes of pointing out that it can be done.
-    instance.bind("connection", function (i, c) {
-        if (typeof console !== "undefined")
-            console.log("connection", i.connection);
-    });
+    
 
     // get the list of ".childOf" + headID elements.            
     var smallWindows = jsPlumb.getSelector(".smallPost");
@@ -51,28 +53,27 @@ var headID = $('.headPost').attr('id');
         // make 'window1' a connection source. notice the filter and filterExclude parameters: they tell jsPlumb to ignore drags
         // that started on the 'enable/disable' link on the blue window.
         instance.makeSource(headID, {
-            filter:"a",
+            filter:"button",
             filterExclude: true,
             maxConnections: -1,
             allowLoopback: false,
-            endpoint:[ "Dot", { radius: 3, cssClass:"small-blue" } ],
-            anchor:sourceAnchors
+            dragAllowedWhenFull:false
+            
         });
 
         // configure the .smallPosts as targets.
         instance.makeTarget(smallWindows, {
-            dropOptions: { hoverClass: "hover" },
-            endpoint:[ "Dot", { radius: 3, cssClass:"large-green" } ]
+            filter:"button",
+            filterExclude: true
         });
         
         
         instance.makeSource(smallWindows, {
-            filter:"a",
+            filter:"button",
             filterExclude: true,
             allowLoopback: false,
             maxConnections: -1,
-            endpoint:[ "Dot", { radius: 3, cssClass:"small-blue" } ],
-            anchor:sourceAnchors
+            dragAllowedWhenFull:false
         });
         
         
@@ -119,15 +120,16 @@ var headID = $('.headPost').attr('id');
 
 function makeConnection(c){
 	var left = 30;
-	var cons = [];
-	var i, j;
-	for (i=0; i<c.length; i++){
-		cons = []; //empty the array
-		$('.childOf' + c[i]).each( function(i,e) {
+	//var cons = [];
+	var k, j;
+	for (k=0; k<c.length; k++){
+		var head = c[k];
+		var cons = []; //empty the array
+		$('.childOf' + head).each( function(i,e) {
 			/* you can use e.id instead of $(e).attr('id') */
-			cons.push($(e).attr('id'));
+			cons.push(e.id);
 		});
-		//alert("cons is: " + cons);
+		
 		//break out of the function if it's empty
 		if ( cons.length < 1 ) {
 			return;
@@ -135,12 +137,11 @@ function makeConnection(c){
 		posttop = posttop + topPad;
 		for (j=0; j<cons.length; j++){
 			//set the positions
-			
-			$("#"+cons[j]).css("left", left);
-			$("#"+cons[j]).css("top", posttop);
+			var idstring = "#" + cons[j];
+			$(idstring).css("left", left);
+			$(idstring).css("top", posttop);
 			left = left + leftPad;
-			instance.connect({ source: c[i], target: cons[j], anchors:[ "Bottom", "Top" ], type:"basic", detachable:false });
-			//alert("connecting: " + cons[j] + "to" + c[i]);
+			instance.connect({ source: c[k], target: cons[j], anchors:[ "Bottom", "Top" ], type:"basic", detachable:false });
 		}
 		//posttop = posttop + topPad;
 		makeConnection(cons);

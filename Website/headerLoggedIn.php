@@ -31,9 +31,9 @@ function showResults(str) {
 			else {echo '<a class="navbar-brand" href="Login.php">BrainStorm Inc.</a>';}?>
       </div>
 
-      <form class="navbar navbar-left navbar-form " role="search">
+      <form class="navbar navbar-left navbar-form " role="search" action="search.php" method="post">
         <div class="input-group">
-		<input type="text" size="30" onkeyup="showResults(this.value)"></input>
+		<input name="searchResults" type="text" size="30" onkeyup="showResults(this.value)"></input>
 		<div id="livesearch"></div>
 			<span class="input-group-btn">
               <button type="submit" class="btn btn-default">
