@@ -4,6 +4,8 @@
  	//get the group ID
 	$groupID = 1;
 	$full_post = "";
+	$delete_button = "";
+	$full_title = "";
  	//connecting to the database
 if (file_exists('cred/cred.php')){
 	include('cred/cred.php');
@@ -46,7 +48,11 @@ try {
 								<p><a href='profile.php?uID=$pu'><img src='$ui' width=70 /> $pu</a></p>
 								<p>Rating: $pr</p>
 						   </div>";	
-					
+			
+			//set the delete button if it's the correct user
+			if ($uID == $pu){
+				$delete_button = '<h3>Delete This Post:</h3><button type="submit" class="btn btn-danger btn-block" name="deletepost" value="deletepost">Delete Post</button>';
+			}		
 		}
 	}
 	
@@ -67,7 +73,7 @@ try {
 	}
 	
 	//make a reply
-	if ($_SERVER["REQUEST_METHOD"] == "POST" && test_input($_POST["modal"]) == "make_post") {
+	if ($_SERVER["REQUEST_METHOD"] == "POST" && test_input($_POST["modal"]) == "make_post" && !isset($_POST["deletepost"])) {
 		
 		echo $replyTo;
 			
@@ -124,6 +130,19 @@ try {
 	}
 	
 	
+	//delete post
+	if ($_SERVER["REQUEST_METHOD"] == "POST" && test_input($_POST["modal"]) == "make_post" && isset($_POST["deletepost"]) && $_POST["deletepost"] == "deletepost") {
+		
+		echo $replyTo;
+		
+		$stmt = $dbh->prepare("DELETE FROM posts WHERE post_ID=:postID");
+		$stmt->bindParam(':postID', $replyTo, PDO::PARAM_INT);
+		$stmt->execute();
+		echo "<script>location.href = 'profile.php?uID=".$uID."'</script>";
+	}
+	
+	
+	
 	//close the connection
 	$dbh = null;
 
@@ -147,6 +166,7 @@ try {
         <div class="modal-body" style="padding:40px 50px;">
         
         	<?php echo $full_post; ?>
+        	
         	
         	<hr>
         	<h3>Reply:</h3>
@@ -214,8 +234,9 @@ try {
 			
               <button type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-send"></span> Post</button>
           
-		  
-		  
+		  	
+		  	<hr>
+		  	<?php echo $delete_button; ?>
 		  
 		  
 		  </form>

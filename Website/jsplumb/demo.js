@@ -114,7 +114,8 @@ var headID = $('.headPost').attr('id');
 	
 	//recursively makes connections
 	//topPad += 150;
-	makeConnection(cons);
+	setTimeout(makeConnection(cons), 1000);
+	//makeConnection(cons);
 	
 });	
 
