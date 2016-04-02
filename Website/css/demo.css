@@ -23,9 +23,20 @@
     padding: 0.5em;
 }
 
+
+.post_content {
+    -ms-word-break: break-all;
+     word-break: break-all;
+     max-height: 4em;
+     overflow: hidden;
+     
+}
+
+
 .smallPost, .babyWindow {
     background-color: #558822;
     cursor: move;
+     
 }
 
 /** ENABLE/DISABLE LINK **/
@@ -48,6 +59,9 @@
     width: 20em;
     min-height: 6em;
     text-align: left;
+    overflow: hidden;
+     -ms-word-break: break-all;
+     word-break: break-all;
 }
 
 /** SMALL WINDOW POSITIONS **/
