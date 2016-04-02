@@ -18,8 +18,6 @@ $top = 100;
 $grouplist = '<option value="1" select>Everyone</option>'.
 			'<option value="2">Private</option>';
 $modal_script = "";
-$groupArray = array();
-array_push($groupArray, 1);
 
 
 //change this to privacy setting
@@ -51,22 +49,6 @@ if (!isset($dbpword)) {
 try {
 	$dbh = new PDO($dsn, $dbname, $dbpword);
 	
-	//get the user's groups to determine if they can view this
-	$stmt = $dbh->prepare("SELECT * FROM in_group JOIN groups ON groups.groupID=in_group.groupID WHERE in_group.username=:uID");
-	$stmt->bindParam(':uID', $uID, PDO::PARAM_STR);
-	$stmt->execute();
-	if ($stmt->rowCount() > 0) {
-		while($row=$stmt->fetch(PDO::FETCH_ASSOC))
-		{
-			//get all groups and their names
-			$userGroupID = $row["groupID"];
-			$groupname = $row["groupname"];	
-			array_push($groupArray, $userGroupID);	
-		}
-	}
-	
-	 
-	
 	//get head post
 	$stmt = $dbh->prepare("SELECT * FROM posts WHERE post_ID=:hID");
 	$stmt->bindParam(':hID', $hID, PDO::PARAM_INT);
@@ -75,18 +57,9 @@ try {
 		while($row=$stmt->fetch(PDO::FETCH_ASSOC))
 		{
 			$latest_post = $row["post_ID"];
-			$groupID = $row["groupID"];
-			$un = $row["username"];
-			//if group is set to everyone or user has group viewing privilages
-			if ($groupID == 1 || in_array($groupID, $groupArray)) {
-				$postsList .= create_post($row["post_ID"], $row["head"], $row["type"], $row["date_time"], $row["content"], 
-				$row["title"], $row["image"], $row["rating"], $row["username"]);	
-			} else if ($groupID == 2 && $un == $uID) {
-				$postsList .= create_post($row["post_ID"], $row["head"], $row["type"], $row["date_time"], $row["content"], 
-				$row["title"], $row["image"], $row["rating"], $row["username"]);
-			} else {
-				$postsList .= "You are not authorized to view this mind map.";
-			}
+			//get all groups and their names
+			$postsList .= create_post($row["post_ID"], $row["head"], $row["type"], $row["date_time"], $row["content"], 
+			$row["title"], $row["image"], $row["rating"], $row["username"]);		
 		}
 	}
 	
@@ -94,6 +67,20 @@ try {
 	
 	$post_styles.= "</style>";
 	
+	
+	//get the user's groups
+	$stmt = $dbh->prepare("SELECT * FROM in_group JOIN groups ON groups.groupID=in_group.groupID WHERE in_group.username=:uID");
+	$stmt->bindParam(':uID', $uID, PDO::PARAM_STR);
+	$stmt->execute();
+	if ($stmt->rowCount() > 0) {
+		while($row=$stmt->fetch(PDO::FETCH_ASSOC))
+		{
+			//get all groups and their names
+			$groupID = $row["groupID"];
+			$groupname = $row["groupname"];
+			$grouplist .= '<option value="'.$groupID.'">'.$groupname.'</option>';		
+		}
+	}
 	
 	//sets the correct head value based on button clicked
 	$head = $hID;
@@ -168,30 +155,12 @@ function post_all_posts($current_post){
 	if ($stmt->rowCount() > 0) {
 		while($row=$stmt->fetch(PDO::FETCH_ASSOC))
 		{
+			//get all groups and their names
+			$postsList .= create_post($row["post_ID"], $row["head"], $row["type"], $row["date_time"], $row["content"], 
+			$row["title"], $row["image"], $row["rating"], $row["username"]);
 			
-			global $groupArray, $uID;
-			$groupID = $row["groupID"];
-			$un = $row["username"];
-			
-			
-			//if group is set to everyone or user has group viewing privilages
-			if ($groupID == 1 || in_array($groupID, $groupArray)) {
-				//get all groups and their names
-				$postsList .= create_post($row["post_ID"], $row["head"], $row["type"], $row["date_time"], $row["content"], 
-				$row["title"], $row["image"], $row["rating"], $row["username"]);
-			
-				//now recursively do the rest	
-				post_all_posts($row["post_ID"]);	
-			} else if ($groupID == 2 && $un == $uID) {
-				//get all groups and their names
-				$postsList .= create_post($row["post_ID"], $row["head"], $row["type"], $row["date_time"], $row["content"], 
-				$row["title"], $row["image"], $row["rating"], $row["username"]);
-			
-				//now recursively do the rest	
-				post_all_posts($row["post_ID"]);
-			} else {
-				//$postsList .= "You are not authorized to view this mind map.";
-			}
+			//now recursively do the rest	
+			post_all_posts($row["post_ID"]);
 		}
 	} else {
 		//there's no children
@@ -235,7 +204,7 @@ function post_all_posts($current_post){
 	
 	<style>
       .container {
-        max-width: 98%;
+        max-width: 940px;
       }
       textarea {
         resize: vertical;

@@ -18,6 +18,114 @@ session_start();
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 
+	<?php
+	//session vars
+	$username = $_SESSION["username"];
+	
+	$friends = array();
+	$postsList = "";
+	
+	//connecting to the database
+	if (file_exists('cred/cred.php')){
+		include('cred/cred.php');
+	}
+	//set credentials if they are not set already
+	if (!isset($dsn)) {
+		$dsn = 'mysql:host=localhost;dbname=brainstorm;port=8889';
+	}
+	if (!isset($dbname)) {
+		$dbname = 'root';
+	}
+	if (!isset($dbpword)) {
+		$dbpword = 'root';
+	}
+	
+	try {
+		$dbh = new PDO($dsn, $dbname, $dbpword);
+		
+		//create a list of users that the logged in user is following
+		$stmt = $dbh->prepare("SELECT * FROM follows WHERE follower=:username");
+		$stmt->bindParam(':username', $username, PDO::PARAM_STR);
+		$stmt->execute();
+		if ($stmt->rowCount() > 0) {
+			while($row=$stmt->fetch(PDO::FETCH_ASSOC))
+			{
+				array_push($friends,$row["username"]);	
+			}
+		}
+		
+		
+		//get the user's posts
+		
+		foreach($friends as $friend){
+			$stmt = $dbh->prepare("SELECT * FROM posts JOIN groups ON posts.groupID=groups.groupID WHERE username=:uID ORDER BY DATE_TIME DESC");
+			$stmt->bindParam(':uID', $friend, PDO::PARAM_STR);
+			$stmt->execute();
+			if ($stmt->rowCount() > 0) {
+				while($row=$stmt->fetch(PDO::FETCH_ASSOC))
+				{
+					//get all groups and their names
+					$postsList .= create_post($row["post_ID"], $row["head"], $row["type"], $row["date_time"], $row["content"], 
+					$row["title"], $row["image"], $row["rating"], $row["username"], $row["groupID"], $row["groupname"]);		
+				}
+			}
+		}
+		
+		
+		
+	}catch (PDOException $e) {
+		print "Error!: " . $e->getMessage() . "<br/>";
+		die();
+	}
+	
+	
+	function create_post($post_ID, $head, $type, $date, $content, $title, $image, $rating, $username, $groupID, $groupName){
+	if ($post_ID > 1) {
+		//get the correct post page
+		$link = 0;
+		$groupN = "";
+		if ($head==1){
+			$link = $post_ID;
+		} else {
+			$link = $head;
+		}
+		//set everyone group to everyone
+		if ($groupID==1){
+			$groupN = "Public";
+		} else {
+			$groupN = $groupName;
+		}
+		//make the string
+		return '<div class="panel panel-info panel-post">
+				<div class="panel-heading">
+				  <h3 class="panel-title"><a href="Posts.php?head='.$link.'">'.$title.'</a></h3>
+				</div>
+				<div class="panel-body">
+				  <p class ="post_date">'.$date.'</p>
+				  <p class="post_content">'.$content.'</p>
+				  <p class="post_rating">Rating: '.$rating.'</p>
+				  <p class="post_group">Group: <a href="Group.php?gID='.$groupID.'">'.$groupN.'</a>
+				</div>
+				</div>';
+	} else {
+		return null;
+	}
+}
+	
+	
+	
+	
+	function test_input($data) {
+   $data = trim($data);
+   $data = stripslashes($data);
+   $data = htmlspecialchars($data);
+   return $data;
+}
+	
+	
+	
+	
+	?>
     
     <style>
       .container {
@@ -90,38 +198,25 @@ session_start();
       <div style="background-image: url(assets/img/iceland.jpg);"></div>
           <a href="profile.php"><img src=""></a>
 
-          <h5 >
-            <a href="profile.php">Whimp</a>
-          </h5>
+          <h3 >
+            Following:
+          </h3>
 
-          <p>I feel sad because of whom I never was. I hate the everythingness of everything.</p>
-        
         <br>
-         <div >
-          <h5 >About <small>· <a href="#">Edit</a></small></h5>
-          <ul >
-            <li><span ></span>Went to <a href="#">Oh, Canada</a>
-            <li><span ></span>Became friends with <a href="#">Obama</a>
-            <li><span ></span>Worked at <a href="#">Github</a>
-            <li><span ></span>Lives in <a href="#">San Francisco, CA</a>
-            <li><span ></span>From <a href="#">Seattle, WA</a>
+         <div>
+          <ul>
+			<?php
+			
+			foreach($friends as $friend){
+            
+			echo "<li>"."$friend"."</li>";
+			
+			}
+			?>
           </ul>
         </div>
 
         <br>
-        <div >
-          <h5 >Photos <small>· <a href="#">Edit</a></small></h5>
-          <div data-grid="images" data-target-height="150">
-            <div>
-              <img data-width="640" data-height="640" data-action="zoom" src="">
-            </div>
-
-            <div>
-              <img data-width="640" data-height="640" data-action="zoom" src="">
-            </div>
-
-          </div>
-        </div>
       
       </div><!-- jumbo -->
     </div><!-- col-md-3 end -->
@@ -132,25 +227,11 @@ session_start();
 
           
       <br>
-          <div class="jumbotron">
-            
-			
-			
-			<p> This part we can show all the interact between this user and other user! </p>
-          <br>
-            <p> And their genius ideas!</p>
-          <br>
-            <p>" in short, the period was so far like the present period, that some of its noisiest authorities insisted on its being received, for good or for evil, in the superlative degree of comparison only." </p>
-          <br>
-            <p>There are times that walk from you like some passing afternoon </p>
-          <br>
-            <p> When the routine bites hard And ambitions are low </p>
-          
+
+            <h3>Following Posts</h3>
+			<?php echo $postsList; ?>
 		  
-		  
-		  
-		  
-		  </div>
+
       </ul>
     </div>
 
