@@ -522,6 +522,7 @@ try {
 			$stmt->bindParam(':title', $title, PDO::PARAM_STR);
 			$stmt->bindParam(':type', $type, PDO::PARAM_STR);
 			$stmt->execute();
+			echo "<script>location.href = 'profile.php?uID=".$uID."'</script>";
 		}
 		else{
 			//reopen the post page
