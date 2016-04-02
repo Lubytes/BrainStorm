@@ -487,7 +487,6 @@ try {
 	}
 
 	if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["modal"]) && test_input($_POST["modal"]) == "make_post") {
-		$head = test_input($_POST["replyTo"]);
 	   if (empty($_POST["title"])) {
 		 $titleErr = "Title is required";
 		 $val = "0";
