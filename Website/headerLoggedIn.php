@@ -23,7 +23,7 @@ function showResults(str) {
 
 
 
-    <nav class="navbar navbar-default app-navbar">
+    <nav class="navbar navbar-default">
     <div class="container" style="max-width: 940px;">
       <div class="navbar-header">
 		
