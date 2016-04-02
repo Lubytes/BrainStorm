@@ -370,7 +370,7 @@ $(document).ready(function(){
             <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
           </p>
           <div class="jumbotron">
-            <div style="display:inline-block;margin:10px;"></div>
+            <div style="background-image: url(assets/img/iceland.jpg);"></div>
 				<!--This will be the follow/unfollow button -->
 				<form role="form" method="post">
 				<?php if ($username != $uID && $isFollowing == 0) { 
@@ -391,12 +391,10 @@ $(document).ready(function(){
 				
 				-->
 				<a href="profile.php"><img src=""></a>
-				<div>			
+			
                 <h3>
-                  <?php echo '<img src="'.$displayImg.'" class="profile_img" style="width:256px;height:256px;"/>'; ?> <?php echo $displayName; ?>
+                  <?php echo '<img src="'.$displayImg.'" class="profile_img" />'; ?> <?php echo $displayName; ?>
                 </h3>
-            	</div>
-            	<div>
                 	<p>
                   <?php echo "Gender: " . $displayGender; ?>
                   </p>
@@ -407,12 +405,13 @@ $(document).ready(function(){
                   		' <!-- Trigger the modal with a button -->
 						<button type="button" class="btn btn-info" data-toggle="modal" data-target="#imgModal" name="submit_files">Upload new image</button>
 						<br /><br />'.
-                  		'<button type="button" class="btn btn-info" data-toggle="modal" data-target="#bioModal">Update bio</button>';  
+                  		'<button type="button" class="btn btn-info" data-toggle="modal" data-target="#bioModal">Update bio</button>'; 
+					echo "<br><br>" .'<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete Account</button>';
                   } 
                   
                   ?>
                   </p>
-                 </div> 
+                  
                  
 
                   
@@ -537,8 +536,15 @@ try {
 
    
 	}
+	if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["modal"]) && test_input($_POST["modal"]) == "deleteProfile") {
+		$stmt = $dbh->prepare("DELETE FROM users WHERE username=:username");
+		$stmt->bindParam(':username', $username, PDO::PARAM_STR);
+		$stmt->execute();
+		echo "<script>location.href = 'Logout.php'</script>";
+		
+	}
 	//follow button was clicked
-	if ($_SERVER["REQUEST_METHOD"] == "POST" && test_input($_POST["follow"]) == "follow"){
+	if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["follow"]) && test_input($_POST["follow"]) == "follow"){
 		
 		$stmt = $dbh->prepare("INSERT INTO follows (username, follower)
 								VALUES (:username, :uID)");
@@ -548,7 +554,7 @@ try {
 		echo "<script>location.href = 'profile.php?uID=".$uID."'</script>";
 		//header("Location: ".$_SERVER['PHP_SELF']);		
 	}
-	if ($_SERVER["REQUEST_METHOD"] == "POST" && test_input($_POST["follow"]) == "unfollow"){
+	if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["follow"]) && test_input($_POST["follow"]) == "unfollow"){
 		$stmt = $dbh->prepare("DELETE FROM follows WHERE username=:uID AND follower=:username");
 		$stmt->bindParam(':username', $username, PDO::PARAM_STR);
 		$stmt->bindParam(':uID', $uID, PDO::PARAM_STR);
@@ -702,7 +708,7 @@ try {
 
 	<?php include "Modal_bio.php"; ?>
 
-	  
+	<?php include "deleteModal.php"; ?>
     
   </body>
 </html>
