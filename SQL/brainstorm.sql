@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `latouf`
+-- Database: `brainstorm`
 --
 
 -- --------------------------------------------------------
@@ -231,21 +231,21 @@ ADD CONSTRAINT `follows_ibfk_2` FOREIGN KEY (`follower`) REFERENCES `users` (`us
 -- Constraints for table `groups`
 --
 ALTER TABLE `groups`
-ADD CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`creator`) REFERENCES `users` (`username`);
+ADD CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`creator`) REFERENCES `users` (`username`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `in_group`
 --
 ALTER TABLE `in_group`
-ADD CONSTRAINT `in_group_ibfk_1` FOREIGN KEY (`username`) REFERENCES `users` (`username`),
-ADD CONSTRAINT `in_group_ibfk_2` FOREIGN KEY (`groupID`) REFERENCES `groups` (`groupID`);
+ADD CONSTRAINT `in_group_ibfk_1` FOREIGN KEY (`username`) REFERENCES `users` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
+ADD CONSTRAINT `in_group_ibfk_2` FOREIGN KEY (`groupID`) REFERENCES `groups` (`groupID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pending_group`
 --
 ALTER TABLE `pending_group`
-ADD CONSTRAINT `pending_group_ibfk_1` FOREIGN KEY (`username`) REFERENCES `users` (`username`),
-ADD CONSTRAINT `pending_group_ibfk_2` FOREIGN KEY (`groupID`) REFERENCES `groups` (`groupID`);
+ADD CONSTRAINT `pending_group_ibfk_1` FOREIGN KEY (`username`) REFERENCES `users` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
+ADD CONSTRAINT `pending_group_ibfk_2` FOREIGN KEY (`groupID`) REFERENCES `groups` (`groupID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `posts`
@@ -253,7 +253,7 @@ ADD CONSTRAINT `pending_group_ibfk_2` FOREIGN KEY (`groupID`) REFERENCES `groups
 ALTER TABLE `posts`
 ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`username`) REFERENCES `users` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
 ADD CONSTRAINT `posts_ibfk_2` FOREIGN KEY (`head`) REFERENCES `posts` (`post_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-ADD CONSTRAINT `posts_ibfk_3` FOREIGN KEY (`groupID`) REFERENCES `groups` (`groupID`);
+ADD CONSTRAINT `posts_ibfk_3` FOREIGN KEY (`groupID`) REFERENCES `groups` (`groupID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `ratings`
