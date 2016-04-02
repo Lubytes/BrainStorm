@@ -235,7 +235,7 @@ function test_input($data) {
 		$stmt->bindParam(':status', $zero, PDO::PARAM_INT);
 		$stmt->bindParam(':admin', $admin, PDO::PARAM_INT);
 		$stmt->execute();
-		
+		echo "<script>location.href = 'Login.php'</script>";
 	}
 	
 	//close the connection
