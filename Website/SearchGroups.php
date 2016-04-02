@@ -1,7 +1,7 @@
 <?php
 //start the session. if the user is logged in, display creation form.
 session_name('project');  
-session_start();
+//session_start();
 require_once('header.php');
 
 
@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		
 		$keywords = $_POST['keywords'];
 		$key = explode(" ", $keywords);
-		print_r($key);
+		//print_r($key);
 		
 		//connecting to the database
 		if (file_exists('cred/cred.php')){
