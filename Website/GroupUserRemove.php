@@ -8,6 +8,7 @@ require_once('header.php');
 $username = '';
 $list = $_POST['checkusers'];
 $gID = $_POST['gID'];
+$end = "";
 
 if ($_SESSION["loggedIn"] == true) {
 	$username = $_SESSION["username"];
@@ -40,6 +41,7 @@ try {
 			$stmt->bindParam(':un', $list[$i], PDO::PARAM_STR);
 			$stmt->bindParam(':gi', $gID, PDO::PARAM_INT);
 			$stmt->execute();
+			$end .= "$list[$i] is removed. <a href='ManageGroups.php'>Manage more groups</a><br />";
 	}
 	
 
@@ -69,7 +71,7 @@ function test_input($data) {
         <div class="panel panel-default" style="clear: both;">
           <div class="panel-heading">
             
-            
+            <?php echo $end; ?>
 
           </div> <!-- /.panel-body -->
         </div> <!-- /.panel -->

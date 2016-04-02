@@ -36,9 +36,14 @@ try {
 			$pu = $info["username"];
 			$ui = $info["picture"];
 			$groupID = $info["groupID"];
+			//fill empty images
+			if (empty($ui)){
+				//blank profile image here
+				$ui = "img/profile/blank.png";
+			}
 			$full_post .= "<div>
 								<p>$pc</p>
-								<p><a href='profile.php?uID=$pu'><img src='$ui' width=100 /> $pu</a></p>
+								<p><a href='profile.php?uID=$pu'><img src='$ui' width=70 /> $pu</a></p>
 								<p>Rating: $pr</p>
 						   </div>";	
 					
@@ -105,6 +110,8 @@ try {
 				echo "\nPDO::errorInfo():\n";
 				print_r($dbh->errorInfo());
 			}
+			//reload
+			echo "<script>location.href = 'Posts.php?head=".$hID."'</script>";
 		}
 		else{
 			//reopen the post page

@@ -11,7 +11,7 @@ $groupname = '';
 $nameErr = $descErr = $loginErr = "";
 $g = $d = $l = '0';
 $val = true; //tests for validation
-$successMessage = "<h3>User added successfully!</h3>";
+$successMessage = "<h3>Group created successfully!</h3>";
 
 if ($_SESSION["loggedIn"] == true) {
 	$l = '0';
