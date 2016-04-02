@@ -130,16 +130,13 @@ session_start();
     <div class="col-md-6 ">
        <ul >
 
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Message">
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="button" aria-labelledby="..." data-toggle="modal" data-target="#myModal">
-                <span class="glyphicon glyphicon-comment"></span></button>
-            </span>
-          </div>
+          
       <br>
           <div class="jumbotron">
-            <p> This part we can show all the interact between this user and other user! </p>
+            
+			
+			
+			<p> This part we can show all the interact between this user and other user! </p>
           <br>
             <p> And their genius ideas!</p>
           <br>
@@ -148,7 +145,12 @@ session_start();
             <p>There are times that walk from you like some passing afternoon </p>
           <br>
             <p> When the routine bites hard And ambitions are low </p>
-          </div>
+          
+		  
+		  
+		  
+		  
+		  </div>
       </ul>
     </div>
 

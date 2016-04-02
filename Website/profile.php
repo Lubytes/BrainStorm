@@ -22,6 +22,7 @@ $postsList = "";
 
 $modal = "";
 
+$isFollowing =0;
 
 //connecting to the database
 	if (file_exists('cred/cred.php')){
@@ -61,7 +62,14 @@ $modal = "";
 				
 			}
 		}
-		
+	
+	//get if following
+	$stmt = $dbh->prepare("SELECT * FROM follows WHERE username=:uID AND follower=:username");
+	$stmt->bindParam(':uID', $uID, PDO::PARAM_STR);
+	$stmt->bindParam(':username', $username, PDO::PARAM_STR);
+	$stmt->execute();
+	if ($stmt->rowCount() > 0) {$isFollowing =1;}
+			
 	//get the user's groups
 	$stmt = $dbh->prepare("SELECT * FROM in_group JOIN groups ON groups.groupID=in_group.groupID WHERE in_group.username=:uID");
 	$stmt->bindParam(':uID', $uID, PDO::PARAM_STR);
@@ -98,7 +106,7 @@ $modal = "";
 	} 
 	
 	
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['modal'])) {
 	
 	
 	$modal = test_input($_POST["modal"]);
@@ -364,12 +372,24 @@ $(document).ready(function(){
           <div class="jumbotron">
             <div style="background-image: url(assets/img/iceland.jpg);"></div>
 				<!--This will be the follow/unfollow button -->
-				<?php if ($username != $uID) { 
-                  	echo '<button type="button" class="btn btn-info btn-warning">Follow</button>'.'<hr>';
+				<form role="form" method="post">
+				<?php if ($username != $uID && $isFollowing == 0) { 
+                  	echo '<input type="hidden" name="followClick" value='."$uID".'>';
+					echo '<input type="hidden" name="follow" value="follow">';
+					echo '<button type="submit" class="btn btn-info btn-warning">Follow</button>'.'<hr>';
                   } 
+				  else if ($username != $uID && $isFollowing == 1) { 
+					echo '<input type="hidden" name="followClick" value='."$uID".'>';
+					echo '<input type="hidden" name="follow" value="unfollow">';
+					echo '<button type="submit" class="btn btn-info btn-danger">Unfollow</button>'.'<hr>';
+				  }
                   ?>
+				</form>
+				<!--
 				
+				<form role="form" method="post">
 				
+				-->
 				<a href="profile.php"><img src=""></a>
 			
                 <h3>
@@ -467,7 +487,7 @@ try {
 		}
 	}
 
-	if ($_SERVER["REQUEST_METHOD"] == "POST" && test_input($_POST["modal"]) == "make_post") {
+	if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["modal"]) && test_input($_POST["modal"]) == "make_post") {
 		$head = test_input($_POST["replyTo"]);
 	   if (empty($_POST["title"])) {
 		 $titleErr = "Title is required";
@@ -515,9 +535,28 @@ try {
 
    
 	}
+	//follow button was clicked
+	if ($_SERVER["REQUEST_METHOD"] == "POST" && test_input($_POST["follow"]) == "follow"){
+		
+		$stmt = $dbh->prepare("INSERT INTO follows (username, follower)
+								VALUES (:username, :uID)");
+		$stmt->bindParam(':username', $uID, PDO::PARAM_STR);
+		$stmt->bindParam(':uID', $username, PDO::PARAM_STR);
+		$stmt->execute();
+		echo "<script>location.href = 'profile.php?uID=".$uID."'</script>";
+		//header("Location: ".$_SERVER['PHP_SELF']);		
+	}
+	if ($_SERVER["REQUEST_METHOD"] == "POST" && test_input($_POST["follow"]) == "unfollow"){
+		$stmt = $dbh->prepare("DELETE FROM follows WHERE username=:uID AND follower=:username");
+		$stmt->bindParam(':username', $username, PDO::PARAM_STR);
+		$stmt->bindParam(':uID', $uID, PDO::PARAM_STR);
+		$stmt->execute();
+		echo "<script>location.href = 'profile.php?uID=".$uID."'</script>";
+		//header("Location: ".$_SERVER['PHP_SELF']);
+	}
 
 	//close the connection
-	//$dbh = null;
+	$dbh = null;
 
 } catch (PDOException $e) {
 	print "Error!: " . $e->getMessage() . "<br/>";
@@ -525,8 +564,6 @@ try {
 } 
 
 ?>
-	    
-	  
 	  
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
