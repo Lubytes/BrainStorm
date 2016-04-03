@@ -42,7 +42,7 @@ $username = $dname = $gender = $email = $pass = "";
 $val = "1";
 $p = "0";
 $u = "0";
-$successMessage = "<h3>User added successfully! Go to your <a href='account.php'>Account Page</a>.</h3>";
+$successMessage = "<h3>User added successfully! Go to <a href='Login.php'>Login Page</a>.</h3>";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
    

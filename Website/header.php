@@ -1,4 +1,3 @@
-<?php session_start();?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -47,7 +46,7 @@
       </form>
 
         <ul class="nav navbar-nav navbar-left">
-          <li><a href="profile.php">Home</a></li>
+          <li><a href="account.php">Home</a></li>
           
           
           <?php if (!isset($_SESSION["username"])) { echo '<li><a href="Login.php">Login</a></li>'; } ?>

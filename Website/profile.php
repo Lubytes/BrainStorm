@@ -24,6 +24,9 @@ $modal = "";
 
 $isFollowing =0;
 
+$groupArray = array();
+array_push($groupArray, 1);
+
 //connecting to the database
 	if (file_exists('cred/cred.php')){
 		include('cred/cred.php');
@@ -41,6 +44,20 @@ $isFollowing =0;
 	
 	try {
 		$dbh = new PDO($dsn, $dbname, $dbpword);
+	
+		//get the user's groups to determine if they can view this
+		$stmt = $dbh->prepare("SELECT * FROM in_group JOIN groups ON groups.groupID=in_group.groupID WHERE in_group.username=:uID");
+		$stmt->bindParam(':uID', $username, PDO::PARAM_STR);
+		$stmt->execute();
+		if ($stmt->rowCount() > 0) {
+			while($row=$stmt->fetch(PDO::FETCH_ASSOC))
+			{
+				//get all groups and their names
+				$userGroupID = $row["groupID"];
+				$groupname = $row["groupname"];	
+				array_push($groupArray, $userGroupID);	
+			}
+		}
 	
 		//get user info
 		$stmt = $dbh->prepare("SELECT * FROM users WHERE username=:uID");
@@ -91,9 +108,15 @@ $isFollowing =0;
 	if ($stmt->rowCount() > 0) {
 		while($row=$stmt->fetch(PDO::FETCH_ASSOC))
 		{
-			//get all groups and their names
-			$postsList .= create_post($row["post_ID"], $row["head"], $row["type"], $row["date_time"], $row["content"], 
-			$row["title"], $row["image"], $row["rating"], $row["username"], $row["groupID"], $row["groupname"]);		
+			$gID = $row["groupID"];
+			//if group is set to everyone or user has group viewing privilages
+			if (in_array($gID, $groupArray)) {
+				$postsList .= create_post($row["post_ID"], $row["head"], $row["type"], $row["date_time"], $row["content"], 
+				$row["title"], $row["image"], $row["rating"], $row["username"], $row["groupID"], $row["groupname"]);
+			} else if ($gID == 2 && $username == $uID) {
+				$postsList .= create_post($row["post_ID"], $row["head"], $row["type"], $row["date_time"], $row["content"], 
+				$row["title"], $row["image"], $row["rating"], $row["username"], $row["groupID"], $row["groupname"]);
+			}	
 		}
 	}
 	
@@ -397,7 +420,7 @@ $(document).ready(function(){
                   </p>
                   <p>
                   <?php echo $displayProfile; ?>
-                  <?php if ($username == $uID) { 
+                  <?php if ($username == $uID || $_SESSION["isAdmin"] == true) { 
                   	echo "</p>".
                   		' <!-- Trigger the modal with a button -->
 						<button type="button" class="btn btn-info" data-toggle="modal" data-target="#imgModal" name="submit_files">Upload new image</button>
@@ -535,7 +558,8 @@ try {
 	}
 	if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["modal"]) && test_input($_POST["modal"]) == "deleteProfile") {
 		$stmt = $dbh->prepare("DELETE FROM users WHERE username=:username");
-		$stmt->bindParam(':username', $username, PDO::PARAM_STR);
+		$ud = test_input($_POST['toDelete']);
+		$stmt->bindParam(':username', $ud, PDO::PARAM_STR);
 		$stmt->execute();
 		echo "<script>location.href = 'Logout.php'</script>";
 		

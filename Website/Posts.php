@@ -23,7 +23,7 @@ array_push($groupArray, 1);
 
 
 //change this to privacy setting
-if ($_SESSION["loggedIn"] == true) {
+if (isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] == true) {
 	$l = '0';
 	$username = $_SESSION["username"];
 
@@ -215,7 +215,6 @@ function post_all_posts($current_post){
     <title>BrainStorm</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 
 	
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
@@ -231,6 +230,7 @@ function post_all_posts($current_post){
 	<link rel="stylesheet" href="css/jsPlumbToolkit-demo.css">
 	<link rel="stylesheet" href="css/demo.css">
 	
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 	
 	
 	<style>
@@ -249,29 +249,57 @@ function post_all_posts($current_post){
 
   <body>
 
+    <!-- Nav -->
+<script>
+function showResults(str) {
+    if (str.length == 0) { 
+        document.getElementById("livesearch").innerHTML = "";
+		document.getElementById("livesearch").style.border="0px";
+        return;
+    }
+	else{
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                document.getElementById("livesearch").innerHTML = xmlhttp.responseText;
+				document.getElementById("livesearch").style.border="1px solid #A5ACB2";
+            }
+        };
+        xmlhttp.open("GET", "livesearch.php?q=" + str, true);
+        xmlhttp.send();
+    }
+}
+</script>
+
+
+
+
     <nav class="navbar navbar-default">
     <div class="container" style="max-width: 940px;">
       <div class="navbar-header">
-        <a class="navbar-brand" href="Login.php">BrainStorm Inc.</a>
+		
+        <?php if (isset($_SESSION["username"])) { echo '<a class="navbar-brand" href="account.php">BrainStorm Inc.</a>'; }
+			else {echo '<a class="navbar-brand" href="Login.php">BrainStorm Inc.</a>';}?>
       </div>
 
-      <form class="navbar navbar-left navbar-form " role="search">
+      <form class="navbar navbar-left navbar-form " role="search" action="search.php" method="post">
         <div class="input-group">
-           <input type="text" class="form-control" placeholder="Search for...">
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="button" aria-label="...">
+		<input name="searchResults" type="text" size="30" onkeyup="showResults(this.value)"></input>
+		<div id="livesearch"></div>
+			<span class="input-group-btn">
+              <button type="submit" class="btn btn-default">
                 <span class="glyphicon glyphicon-search" ></span></button> 
             </span>
+           <!-- <input type="text" class="form-control" placeholder="Search for..."> -->
+           
         </div>
       </form>
 
         <ul class="nav navbar-nav navbar-left">
+        
           <li><a href="account.php">Home</a></li>
-          
-          
           <?php if (!isset($_SESSION["username"])) { echo '<li><a href="Login.php">Login</a></li>'; } ?>
-          
-          <?php if (isset($_SESSION["username"])) { echo '<li><a href="profile.php?uID='.$_SESSION["username"].'" data-action=" ">User Profile
+          <?php if (isset($_SESSION["username"]) && !empty($_SESSION["username"])) { echo '<li><a href="profile.php?uID='.$_SESSION["username"].'" data-action=" ">User Profile
             <span class="glyphicon glyphicon-user" ></span></a></li>'; } ?>
           
           
@@ -283,19 +311,14 @@ function post_all_posts($current_post){
 			  <li role="presentation"><a role="menuitem" tabindex="-1" href="SearchGroups.php">Search Groups</a></li>
 			</ul>
 			</li>
-			<li><a data-toggle="modal" href="#msgModal">Notifications
-            <span class="glyphicon glyphicon-envelope" ></span></a></li>
 			<li><a href="Logout.php">Logout
             <span class="glyphicon glyphicon-off"></span></a></li>
         </ul>
-
  
     </div>
     </nav>
 
     <div class="container">
-	
-	<h1 class="text-center">Have a new idea? Want to improve other ideas?</h1>
 	
 	<!-- Validation Boolean and Display-->
 	<span class="error"> <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { if ($l=="1") {echo $loginErr."<br><br>"; $val = false; }}?></span>

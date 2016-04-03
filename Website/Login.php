@@ -40,7 +40,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			$stmt = $dbh->prepare('SELECT * from users WHERE username=:name');
 			$stmt->bindParam(':name', $username, PDO::PARAM_STR);
 			$stmt->execute();
-			//$row = $stmt->fetch();
 			if ($stmt->rowCount() > 0){
 				$check = $stmt->fetch(PDO::FETCH_ASSOC);
 				

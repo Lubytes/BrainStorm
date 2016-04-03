@@ -15,6 +15,7 @@
             
             	<!--Sends User ID-->
             	<input type="hidden" name="modal" value="deleteProfile">
+            	<input type="hidden" name="toDelete" value="<?php echo $uID ?>">
 				<h1>Are you sure?</h1>
 				<h5>We'll miss you :c</h5>
 				
