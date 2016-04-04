@@ -78,17 +78,32 @@ session_start();
 		die();
 	}
 	
+	//returns the tree of the id for linking
+	function get_tree($id){
+		$pid = $id;
+		global $dbh;
+		$stmt = $dbh->prepare("SELECT * FROM posts WHERE post_ID=:pID");
+		$stmt->bindParam(':pID', $id, PDO::PARAM_INT);
+		$stmt->execute();
+		if ($stmt->rowCount() > 0) {
+			while($row=$stmt->fetch(PDO::FETCH_ASSOC))
+			{
+				if ($row["head"] == 1){
+					return $pid;
+				} else {
+					return get_tree($row["head"]);
+				}
+			
+			}
+		}
+	}
 	
 	function create_post($post_ID, $head, $type, $date, $content, $title, $image, $rating, $username, $groupID, $groupName){
 	if ($post_ID > 1) {
 		//get the correct post page
 		$link = 0;
 		$groupN = "";
-		if ($head==1){
-			$link = $post_ID;
-		} else {
-			$link = $head;
-		}
+		$link = get_tree($post_ID);
 		//set everyone group to everyone
 		if ($groupID==1){
 			$groupN = "Public";
