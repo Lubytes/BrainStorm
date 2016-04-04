@@ -1,7 +1,7 @@
 <?php
 //start the session. if the user is logged in, display creation form.
 session_name('project');  
-//session_start();
+session_start();
 require_once('header.php');
 
 

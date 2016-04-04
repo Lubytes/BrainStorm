@@ -149,7 +149,7 @@ require_once('header.php');
       <div id="login">
         <div class="panel panel-default" style="clear: both;">
           <div class="panel-heading">
-            <h2 class="panel-title">Login in Please!</h2>
+            <h2 class="panel-title">Login Please!</h2>
           </div>
           <div class="panel-body">  
 
